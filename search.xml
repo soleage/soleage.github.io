@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>CentOS8网络配置</title>
+    <url>/Linux/2020/CentOS8%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<p>这是我的第一篇文件。很高兴，我的博客终于搭建完毕了。<br>Linux操作系统的优势之一就是网络功能，Linux版本繁多，各个版本的配置大体相同，这里我就用CentOS8来配置网络。<br>我大学接触的Linux为Redhat5，那时候还不太感兴趣，没有过多学习，等到了7版本，偶然间有了兴趣，想搭建一个博客，</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>centos</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>华为路由器开启SSH</title>
     <url>/%E8%B7%AF%E7%94%B1%E4%B8%8E%E4%BA%A4%E6%8D%A2%E6%9C%BA%E6%8A%80%E6%9C%AF/2020/%E5%8D%8E%E4%B8%BA%E8%B7%AF%E7%94%B1%E5%99%A8%E5%BC%80%E5%90%AFSSH/</url>
     <content><![CDATA[<h2 id="华为路由器开启SSH"><a href="#华为路由器开启SSH" class="headerlink" title="华为路由器开启SSH"></a>华为路由器开启SSH</h2><p>SSH 为 Secure Shell 的缩写，由 IETF 的网络小组（Network Working Group）所制定；SSH 为建立在应用层基础上的安全协议。SSH 是较可靠，专为远程登录会话和其他网络服务提供安全性的协议。利用 SSH 协议可以有效防止远程管理过程中的信息泄露问题。SSH最初是UNIX系统上的一个程序，后来又迅速扩展到其他操作平台。SSH在正确使用时可弥补网络中的漏洞。SSH客户端适用于多种平台。几乎所有UNIX平台—包括HP-UX、Linux、AIX、Solaris、Digital UNIX、Irix，以及其他平台，都可运行SSH。</p>
@@ -20,8 +33,8 @@
         <category>路由与交换机技术</category>
       </categories>
       <tags>
-        <tag>R&amp;S</tag>
         <tag>Linux</tag>
+        <tag>R&amp;S</tag>
       </tags>
   </entry>
 </search>
