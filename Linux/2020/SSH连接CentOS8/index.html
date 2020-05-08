@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Helvetica:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":"ture","color":"#222","save":"manual"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"slideUpBigIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="一般情况下，很少在服务器上连接键盘和显示器进行管理，都是通过远程连接方式管理和维护。对于SSH，相信大家都比我熟悉，我不多介绍(因为我不懂)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSH方式连接CentOS">
+<meta property="og:url" content="http://yoursite.com/Linux/2020/SSH%E8%BF%9E%E6%8E%A5CentOS8/index.html">
+<meta property="og:site_name" content="Fifty Two">
+<meta property="og:description" content="一般情况下，很少在服务器上连接键盘和显示器进行管理，都是通过远程连接方式管理和维护。对于SSH，相信大家都比我熟悉，我不多介绍(因为我不懂)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/2-1_01.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/2-1_02.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-1_01.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-1_02.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-1_03.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-2_01.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-2_02.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-2_03.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-2_04.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-2_05.png">
+<meta property="article:published_time" content="2020-04-10T09:24:58.000Z">
+<meta property="article:modified_time" content="2020-05-08T03:08:14.714Z">
+<meta property="article:author" content="Fifty Two">
+<meta property="article:tag" content="CentOS">
+<meta property="article:tag" content="SSH连接CentOS8">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/2-1_01.png">
+
+<link rel="canonical" href="http://yoursite.com/Linux/2020/SSH%E8%BF%9E%E6%8E%A5CentOS8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>SSH方式连接CentOS | Fifty Two</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Fifty Two</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">8</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">3</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>宝贝回家</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/Linux/2020/SSH%E8%BF%9E%E6%8E%A5CentOS8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Fifty Two">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fifty Two">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SSH方式连接CentOS
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-10 17:24:58" itemprop="dateCreated datePublished" datetime="2020-04-10T17:24:58+08:00">2020-04-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-08 11:08:14" itemprop="dateModified" datetime="2020-05-08T11:08:14+08:00">2020-05-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>一般情况下，很少在服务器上连接键盘和显示器进行管理，都是通过远程连接方式管理和维护。对于SSH，相信大家都比我熟悉，我不多介绍(因为我不懂)</p>
+<a id="more"></a>
+
+<h1 id="一、常见的SSH登录客户端介绍"><a href="#一、常见的SSH登录客户端介绍" class="headerlink" title="一、常见的SSH登录客户端介绍"></a>一、常见的SSH登录客户端介绍</h1><ol>
+<li><p>putty(我非常喜欢的软件)</p>
+<ul>
+<li>官网：<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html" target="_blank" rel="noopener">https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html</a> (地址可能有错)</li>
+<li>大小：约1.2M （小到没朋友，随身携带方便，不占空间，给别人发送时还省流量）</li>
+<li>是否需要安装：便携版直接运行</li>
+<li>语言：English (有汉化版)</li>
+<li>费用：免费</li>
+</ul>
+</li>
+<li><p>SecureCRT(老司机常备的软件，用的人特别多)</p>
+<ul>
+<li>官网：<a href="https://www.vandyke.com/products/securecrt/" target="_blank" rel="noopener">https://www.vandyke.com/products/securecrt/</a></li>
+<li>大小：约35M</li>
+<li>是否需要安装：需要安装</li>
+<li>语言：English (有汉化版）</li>
+<li>费用：官网有介绍</li>
+</ul>
+</li>
+<li><p>Xshell (大学的时候，我常用的软件)</p>
+<ul>
+<li>官网：<a href="https://www.netsarang.com/zh/free-for-home-school/" target="_blank" rel="noopener">https://www.netsarang.com/zh/free-for-home-school/</a></li>
+<li>大小：约42M</li>
+<li>是否需要安装：需要安装</li>
+<li>语言：支持中文</li>
+<li>费用：有免费个人版</li>
+</ul>
+</li>
+<li><p>MobaXterm(最近我发现的，感觉还不错，不用点技术手段，估计得下载一天) </p>
+<ul>
+<li>官网：<a href="https://mobaxterm.mobatek.net/" target="_blank" rel="noopener">https://mobaxterm.mobatek.net/</a></li>
+<li>大小：约26M</li>
+<li>是否需要安装：有便携版</li>
+<li>语言：English (暂未找到汉化版，我英语就是渣渣)</li>
+<li>费用：有免费版本</li>
+<li>自带SFTP</li>
+</ul>
+</li>
+<li><p>FinalShell （据说是国人开发的，听说挺不错，外观可视化效果好，我不太了解）</p>
+<ul>
+<li>官网： <a href="http://www.hostbuf.com/" target="_blank" rel="noopener">http://www.hostbuf.com/</a></li>
+<li>大小：约70M</li>
+<li>是否需要安装：需要安装</li>
+<li>语言：支持中文</li>
+<li>费用：有免费版本</li>
+<li>自带SFTP</li>
+</ul>
+</li>
+<li><p>通过系统自带的程序连接CentOS</p>
+<ul>
+<li>Windows系统，确保已开启SSH客户端，然后打开CMD，然后输入ssh 用户名@IP地址 进行连接<br>如：ssh <a href="mailto:root@192.168.60.128">root@192.168.60.128</a></li>
+<li>Linux系统，在命令行界面，输入ssh 用户名@IP地址 进行连接，如：ssh <a href="mailto:root@192.168.60.128">root@192.168.60.128</a></li>
+</ul>
+</li>
+</ol>
+<h1 id="二、获取CentOS的IP地址"><a href="#二、获取CentOS的IP地址" class="headerlink" title="二、获取CentOS的IP地址"></a>二、获取CentOS的IP地址</h1><ol>
+<li>获取CentOS的IP地址，活动–&gt; 终端 –&gt; 打开的界面输入ip address然后回车，即可看到ip地址<br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/2-1_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/2-1_02.png" alt="https://blog.hellocui.com"></li>
+</ol>
+<h1 id="三、连接"><a href="#三、连接" class="headerlink" title="三、连接"></a>三、连接</h1><ol>
+<li><p>putty连接<br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-1_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-1_02.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-1_03.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>SecureCRT连接<br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-2_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-2_02.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-2_03.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-2_04.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-2_05.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>系统自带客户端</p>
+<ul>
+<li>Windows10<br>运行 –&gt; cmd –&gt; 输入 ssh @192.168.60.128<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\c&gt;ssh root@192.168.60.128</span><br><span class="line">The authenticity of host &#39;192.168.60.128 (192.168.60.128)&#39; can&#39;t be established.</span><br><span class="line">ECDSA key fingerprint is SHA256:jwkAKnY6XAzGMJczLqAMIgW1hRe&#x2F;zLLC+mKsrjVlBMI.</span><br><span class="line">Are you sure you want to continue connecting (yes&#x2F;no)? yes</span><br><span class="line">Warning: Permanently added &#39;192.168.60.128&#39; (ECDSA) to the list of known hosts.</span><br><span class="line">root@192.168.60.128&#39;s password:</span><br><span class="line">Activate the web console with: systemctl enable --now cockpit.socket</span><br><span class="line"></span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure></li>
+<li>Linux客户端, 在命令行下直接输入：ssh @192.168.60.128<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# ssh root@192.168.60.128</span><br><span class="line">The authenticity of host &#39;192.168.60.128 (192.168.60.128)&#39; can&#39;t be established.</span><br><span class="line">ECDSA key fingerprint is SHA256:jwkAKnY6XAzGMJczLqAMIgW1hRe&#x2F;zLLC+mKsrjVlBMI.</span><br><span class="line">Are you sure you want to continue connecting (yes&#x2F;no&#x2F;[fingerprint])? yes</span><br><span class="line">Warning: Permanently added &#39;192.168.60.128&#39; (ECDSA) to the list of known hosts.</span><br><span class="line">root@192.168.60.128&#39;s password:</span><br><span class="line">Activate the web console with: systemctl enable --now cockpit.socket</span><br><span class="line"></span><br><span class="line">Last login: Fri Apr 10 23:58:54 2020 from 192.168.60.1</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<div style="text-align: right"> 2020年4月 <br> https://blog.hellocui.com </div>
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>交个朋友呗</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    握手
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/reward/wechatpay.png" alt="Fifty Two 微信赞赏">
+        <p>微信赞赏</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/CentOS/" rel="tag"><i class="fa fa-tag"></i> CentOS</a>
+              <a href="/tags/SSH%E8%BF%9E%E6%8E%A5CentOS8/" rel="tag"><i class="fa fa-tag"></i> SSH连接CentOS8</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/Linux/2020/nmcli%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/" rel="prev" title="nmcli工具介绍">
+      <i class="fa fa-chevron-left"></i> nmcli工具介绍
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/Linux/CentOS/2020/%E7%BD%91%E5%8D%A1%E5%92%8Cnmcli%E4%BB%8B%E7%BB%8D/" rel="next" title="网卡和nmcli介绍">
+      网卡和nmcli介绍 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80OTUwOC8yNTk5OQ=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、常见的SSH登录客户端介绍"><span class="nav-text">一、常见的SSH登录客户端介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、获取CentOS的IP地址"><span class="nav-text">二、获取CentOS的IP地址</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、连接"><span class="nav-text">三、连接</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Fifty Two"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Fifty Two</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element">
+    天道轮回，苍天饶过谁
+  </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fifty Two</span>
+</div>
+有一种孤独，叫52赫兹
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+    <div id="pjax">
+  
+
+  
+
+  
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'http://yoursite.com/Linux/2020/SSH%E8%BF%9E%E6%8E%A5CentOS8/',]
+      });
+      });
+  </script>
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+    </div>
+<!-- 小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+<!--卖萌-->
+<script type="text/javascript" src="/js/src/dytitle.js"></script>
+</body>
+</html>
+<script type="text/javascript" src="/js/src/particle.js"></script>

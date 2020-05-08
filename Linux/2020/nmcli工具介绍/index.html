@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Helvetica:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":"ture","color":"#222","save":"manual"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"slideUpBigIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="nmcli（NetworkManager命令行界面）是用于通过 NetworkManager配置网络的命令行实用程序。nmcli用于创建，显示，编辑，删除，激活和停用网络连接，以及控制和显示网络设备状态。nmcli实用程序可用于由用户和脚本：  对于服务器，无头机器和终端，nmcli可用于直接控制NetworkManager，而无需GUI。 对于脚本，nmcli支持用于将输出更改为更适合脚本处理的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nmcli工具介绍">
+<meta property="og:url" content="http://yoursite.com/Linux/2020/nmcli%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="Fifty Two">
+<meta property="og:description" content="nmcli（NetworkManager命令行界面）是用于通过 NetworkManager配置网络的命令行实用程序。nmcli用于创建，显示，编辑，删除，激活和停用网络连接，以及控制和显示网络设备状态。nmcli实用程序可用于由用户和脚本：  对于服务器，无头机器和终端，nmcli可用于直接控制NetworkManager，而无需GUI。 对于脚本，nmcli支持用于将输出更改为更适合脚本处理的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-10T09:24:58.000Z">
+<meta property="article:modified_time" content="2020-05-08T03:18:54.039Z">
+<meta property="article:author" content="Fifty Two">
+<meta property="article:tag" content="CentOS">
+<meta property="article:tag" content="nmcli">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/Linux/2020/nmcli%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>nmcli工具介绍 | Fifty Two</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Fifty Two</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">8</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">3</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>宝贝回家</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/Linux/2020/nmcli%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Fifty Two">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fifty Two">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          nmcli工具介绍
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-10 17:24:58" itemprop="dateCreated datePublished" datetime="2020-04-10T17:24:58+08:00">2020-04-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-08 11:18:54" itemprop="dateModified" datetime="2020-05-08T11:18:54+08:00">2020-05-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>nmcli（NetworkManager命令行界面）是用于通过 NetworkManager配置网络的命令行实用程序。nmcli用于创建，显示，编辑，删除，激活和停用网络连接，以及控制和显示网络设备状态。<br>nmcli实用程序可用于由用户和脚本：</p>
+<ul>
+<li>对于服务器，无头机器和终端，nmcli可用于直接控制NetworkManager，而无需GUI。</li>
+<li>对于脚本，nmcli支持用于将输出更改为更适合脚本处理的格式的选项。<a id="more"></a>
+
+</li>
+</ul>
+<h1 id="1-了解nmcli"><a href="#1-了解nmcli" class="headerlink" title="1. 了解nmcli"></a>1. 了解nmcli</h1><p>每个网络设备都对应一个NetworkManager设备。网络设备的配置完全存储在单个NetworkManager连接中。您可以执行将NetworkManager连接应用于NetworkManager设备的网络配置。</p>
+<h2 id="1-1-最常见的nmcli命令是nmcli-device和nmcli-connection："><a href="#1-1-最常见的nmcli命令是nmcli-device和nmcli-connection：" class="headerlink" title="1.1 最常见的nmcli命令是nmcli device和nmcli connection："></a>1.1 最常见的nmcli命令是nmcli device和nmcli connection：</h2><ul>
+<li>nmcli device命令列出了系统中可用的网络设备。</li>
+<li>设备可以是：<ul>
+<li>managed-在NetworkManager控件下。 受管设备可能已连接，表示已激活并配置了该设备，也可能已断开连接，这意味着未配置但已准备好再次激活。</li>
+<li>unmanaged- NetworkManager不控制它。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>nmcli device命令可以接受许多参数。 最值得注意的是：status, show, set, connect, disconnect, modify, delete, wifi。 输入nmcli device help命令以查看完整列表。</li>
+</ul>
+<ul>
+<li>nmcli connection命令列出了NetworkManager中的可用连接配置文件。<ul>
+<li>每个活动的连接在列表顶部显示为绿色。 非活动的连接显示为白色。 DEVICE字段标识在其上应用了连接的设备。</li>
+<li>nmcli connection命令可以采用许多参数来管理连接配置文件。 最值得注意的是：show, up, down, add, modify, delete。 输入nmcli connection help命令以查看完整列表。</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-2-按Tab命令补全"><a href="#1-2-按Tab命令补全" class="headerlink" title="1.2 按Tab命令补全"></a>1.2 按<kbd>Tab</kbd>命令补全</h2><ul>
+<li><p>如果使用nmcli命令，建议键入部分nmcli命令，然后按<kbd>Tab</kbd>键自动完成命令序列。如果可能有多个完成，则<kbd>Tab</kbd>会列出所有它们。这有助于用户更快，更轻松地键入命令。要启用nmcli自动完成功能，请确保安装bash-completion软件包：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install bash-completion</span><br></pre></td></tr></table></figure></li>
+<li><p>软件包安装后，nmcli auto-complete下次您登录控制台时将可用。要也在当前控制台中激活它，请输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source &#x2F;etc&#x2F;profile.d&#x2F;bash_completion.sh</span><br></pre></td></tr></table></figure>
+<h1 id="2-使用nmcli的基本格式为："><a href="#2-使用nmcli的基本格式为：" class="headerlink" title="2. 使用nmcli的基本格式为："></a>2. 使用nmcli的基本格式为：</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmcli [OPTIONS] OBJECT &#123; COMMAND | help &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-1-其中-OPTIONS-可以是可选选项，例如："><a href="#2-1-其中-OPTIONS-可以是可选选项，例如：" class="headerlink" title="2.1 其中[OPTIONS]可以是可选选项，例如："></a>2.1 其中[OPTIONS]可以是可选选项，例如：</h2></li>
+<li><p>-t, terse （简洁）</p>
+<ul>
+<li>例：查看简洁的输出<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli -t device </span><br><span class="line">ens33:ethernet:connected:ens33</span><br><span class="line">ens37:ethernet:connected:ens37</span><br><span class="line">virbr0:bridge:connected:virbr0</span><br><span class="line">lo:loopback:unmanaged:</span><br><span class="line">virbr0-nic:tun:unmanaged:</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+  此模式可用于计算机脚本处理，因为您可以看到简洁的输出，仅显示值。</li>
+</ul>
+</li>
+<li><p>-f, field （领域）<br>此选项指定可以在输出中显示哪些字段。 例如，NAME，UUID，TYPE，AUTOCONNECT，ACTIVE，DEVICE，STATE。 您可以使用一个或多个字段。 如果要使用更多，请不要在逗号后使用空格来分隔字段。</p>
+<ul>
+<li>例：在输出中指定字段<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli -f DEVICE,TYPE device </span><br><span class="line">DEVICE      TYPE     </span><br><span class="line">ens33       ethernet </span><br><span class="line">ens37       ethernet </span><br><span class="line">virbr0      bridge   </span><br><span class="line">lo          loopback </span><br><span class="line">virbr0-nic  tun      </span><br><span class="line">[root@localhost ~]#</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# nmcli -t -f DEVICE,TYPE device   </span><br><span class="line">ens33:ethernet</span><br><span class="line">ens37:ethernet</span><br><span class="line">virbr0:bridge</span><br><span class="line">lo:loopback</span><br><span class="line">virbr0-nic:tun</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>-p, pretty<br>此选项使nmcli产生人类可读的输出。 例如，将值对齐并打印标题。</p>
+<ul>
+<li>例：以漂亮的模式查看输出<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> [root@localhost ~]# nmcli -p device</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">  Status of devices</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">DEVICE      TYPE      STATE      CONNECTION </span><br><span class="line">------------------------------------------------------------------</span><br><span class="line">ens33       ethernet  connected  ens33      </span><br><span class="line">ens37       ethernet  connected  ens37      </span><br><span class="line">virbr0      bridge    connected  virbr0     </span><br><span class="line">lo          loopback  unmanaged  --         </span><br><span class="line">virbr0-nic  tun       unmanaged  --         </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>-h, help<br>打印帮助信息。</p>
+</li>
+</ul>
+<h2 id="2-2-其中“OBJECT”可以是以下选项之一：general-常规-，networking-网络-，radio-无线电-，connection-连接-，device-设备-，agent-代理-和monitor-监视器-。"><a href="#2-2-其中“OBJECT”可以是以下选项之一：general-常规-，networking-网络-，radio-无线电-，connection-连接-，device-设备-，agent-代理-和monitor-监视器-。" class="headerlink" title="2.2 其中“OBJECT”可以是以下选项之一：general(常规)，networking(网络)，radio(无线电)，connection(连接)，device(设备)，agent(代理)和monitor(监视器)。"></a>2.2 其中“OBJECT”可以是以下选项之一：general(常规)，networking(网络)，radio(无线电)，connection(连接)，device(设备)，agent(代理)和monitor(监视器)。</h2><h2 id="2-3-其中，COMMAND是必需的nmcli命令。"><a href="#2-3-其中，COMMAND是必需的nmcli命令。" class="headerlink" title="2.3 其中，COMMAND是必需的nmcli命令。"></a>2.3 其中，COMMAND是必需的nmcli命令。</h2><h2 id="2-4-其中的help是列出与指定对象相关的可用操作："><a href="#2-4-其中的help是列出与指定对象相关的可用操作：" class="headerlink" title="2.4 其中的help是列出与指定对象相关的可用操作："></a>2.4 其中的help是列出与指定对象相关的可用操作：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmcli OBJECT help</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmcli c help</span><br></pre></td></tr></table></figure>
+<h1 id="3-nmcli属性名称和别名概述"><a href="#3-nmcli属性名称和别名概述" class="headerlink" title="3. nmcli属性名称和别名概述"></a>3. nmcli属性名称和别名概述</h1><h2 id="3-1-先决条件"><a href="#3-1-先决条件" class="headerlink" title="3.1 先决条件"></a>3.1 先决条件</h2><p>Property names(属性名称)是NetworkManager用来标识通用选项的特定名称。 以下是一些重要的nmcli属性名称：</p>
+<ul>
+<li>connection.type (连接类型)<br>特定连接的类型。 允许的值包括：adsl，bond，bond-slave，bridge，bridge-slave，bluetooth，cdma，ethernet，gsm，infiniband，olpc-mesh，team，team-slave，vlan，wifi，wimax。 每种连接类型都有特定于类型的命令选项。 您可以在nmcli（1）手册页中看到TYPE_SPECIFIC_OPTIONS列表。 例如，gsm连接需要在apn中指定的访问点名称。 wifi设备需要在ssid中指定的服务集标识符。</li>
+<li>connection.interface-name(连接接口名称)<br>与连接相关的设备名称。 例如，enp1s0。</li>
+<li>connection.id(连接ID)<br>用于连接配置文件的名称。 如: my-connection<br><font color=red>说明</font>：connection.id是连接配置文件的名称，不应与表示设备的接口名称（wlan0，ens37，em1）混淆。 但是，用户可以使用接口命名连接，但是它们不是同一回事。 <font color=blue>一个设备可以有多个连接配置文件</font>。 这对于移动设备或在不同设备之间来回切换网络电缆时特别有用。 无需编辑配置，而是创建不同的配置文件，然后根据需要将其应用到界面。 id选项还引用连接配置文件名称。</li>
+</ul>
+<h2 id="3-2-nmcli命令最重要的选项（例如show，up，down）是："><a href="#3-2-nmcli命令最重要的选项（例如show，up，down）是：" class="headerlink" title="3.2 nmcli命令最重要的选项（例如show，up，down）是："></a>3.2 nmcli命令最重要的选项（例如show，up，down）是：</h2><ul>
+<li>id<br>用户分配给连接配置文件的标识字符串。 可以在nmcli连接命令中使用id来识别连接。 命令输出中的NAME字段始终表示连接ID。 它引用与别名相同的连接配置文件名称。</li>
+<li>uuid<br>系统分配给连接配置文件的唯一标识字符串。 可在nmcli连接命令中使用uuid来标识连接。</li>
+</ul>
+<h2 id="3-3-Aliases-别名-和property-names-属性名称"><a href="#3-3-Aliases-别名-和property-names-属性名称" class="headerlink" title="3.3 Aliases(别名)和property names(属性名称)"></a>3.3 Aliases(别名)和property names(属性名称)</h2><p>别名是属性名称的替代名称-别名在nmcli内部转换为属性。 别名更具可读性，但属性名称更可取。两者可以互换使用。</p>
+<table>
+<thead>
+<tr>
+<th align="center">Alias（别名）</th>
+<th align="center">Example(示例)</th>
+<th align="center">Property(属性)</th>
+<th align="center">Example(示例)</th>
+<th align="center">Definition(定义)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">type</td>
+<td align="center">type bond</td>
+<td align="center">connection.type</td>
+<td align="center">connection.type bond</td>
+<td align="center">type of a specific connection. Some of the connection types are: bond, bridge, ethernet, wifi, infiniband, vlan</td>
+</tr>
+<tr>
+<td align="center">ifname</td>
+<td align="center">ifname ens37</td>
+<td align="center">connection.interface-name</td>
+<td align="center">connection.interface-name enp1s0</td>
+<td align="center">name of the device to which a connection belongs to</td>
+</tr>
+<tr>
+<td align="center">con-name</td>
+<td align="center">con-name “My Connection”</td>
+<td align="center">connection.id</td>
+<td align="center">connection.id “My Connection”</td>
+<td align="center">name of a connection</td>
+</tr>
+</tbody></table>
+<h1 id="4-常用命令"><a href="#4-常用命令" class="headerlink" title="4. 常用命令"></a>4. 常用命令</h1><h2 id="4-1-查看所有连接"><a href="#4-1-查看所有连接" class="headerlink" title="4.1 查看所有连接"></a>4.1 查看所有连接</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli connection show</span><br><span class="line">NAME    UUID                                  TYPE      DEVICE </span><br><span class="line">ens33   8f008d70-827e-4357-a043-e8114cf43b3e  ethernet  ens33  </span><br><span class="line">ens37   fc1bcfed-6d17-4dd6-9a23-49d37217d429  ethernet  ens37  </span><br><span class="line">virbr0  3e31fc6c-da94-4359-8999-30132db8dfad  bridge    virbr0 </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+<h2 id="4-2-仅查看当前活动的连接"><a href="#4-2-仅查看当前活动的连接" class="headerlink" title="4.2 仅查看当前活动的连接"></a>4.2 仅查看当前活动的连接</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli connection show</span><br><span class="line">NAME    UUID                                  TYPE      DEVICE </span><br><span class="line">ens33   8f008d70-827e-4357-a043-e8114cf43b3e  ethernet  ens33  </span><br><span class="line">ens37   fc1bcfed-6d17-4dd6-9a23-49d37217d429  ethernet  ens37  </span><br><span class="line">virbr0  3e31fc6c-da94-4359-8999-30132db8dfad  bridge    virbr0</span><br></pre></td></tr></table></figure>
+<h2 id="4-3-停用连接"><a href="#4-3-停用连接" class="headerlink" title="4.3 停用连接"></a>4.3 停用连接</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli connection down id ens37</span><br><span class="line">Connection &#39;ens37&#39; successfully deactivated (D-Bus active path: &#x2F;org&#x2F;freedesktop&#x2F;NetworkManager&#x2F;ActiveConnection&#x2F;2)</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli connection show</span><br><span class="line">NAME    UUID                                  TYPE      DEVICE </span><br><span class="line">ens33   8f008d70-827e-4357-a043-e8114cf43b3e  ethernet  ens33  </span><br><span class="line">virbr0  3e31fc6c-da94-4359-8999-30132db8dfad  bridge    virbr0 </span><br><span class="line">ens37   fc1bcfed-6d17-4dd6-9a23-49d37217d429  ethernet  --</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-4-激活连接"><a href="#4-4-激活连接" class="headerlink" title="4.4 激活连接"></a>4.4 激活连接</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli connection up id ens37</span><br><span class="line">Connection successfully activated (D-Bus active path: &#x2F;org&#x2F;freedesktop&#x2F;NetworkManager&#x2F;ActiveConnection&#x2F;5)</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli connection show       </span><br><span class="line">NAME    UUID                                  TYPE      DEVICE </span><br><span class="line">ens33   8f008d70-827e-4357-a043-e8114cf43b3e  ethernet  ens33  </span><br><span class="line">ens37   fc1bcfed-6d17-4dd6-9a23-49d37217d429  ethernet  ens37  </span><br><span class="line">virbr0  3e31fc6c-da94-4359-8999-30132db8dfad  bridge    virbr0 </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-5-断开设备连接以防止其再次自动启动"><a href="#4-5-断开设备连接以防止其再次自动启动" class="headerlink" title="4.5 断开设备连接以防止其再次自动启动"></a>4.5 断开设备连接以防止其再次自动启动</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli device disconnect ens37 </span><br><span class="line">Device &#39;ens37&#39; successfully disconnected.</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli connection show</span><br><span class="line">NAME    UUID                                  TYPE      DEVICE </span><br><span class="line">ens33   8f008d70-827e-4357-a043-e8114cf43b3e  ethernet  ens33  </span><br><span class="line">virbr0  3e31fc6c-da94-4359-8999-30132db8dfad  bridge    virbr0 </span><br><span class="line">ens37   fc1bcfed-6d17-4dd6-9a23-49d37217d429  ethernet  --     </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+<p><font color=red>说明</font>若要启动连接，请使用4.4中的激活即可,nmcli connection down命令可在不阻止设备进一步自动激活的情况下停用与设备的连接。 nmcli device disconnect命令可断开设备连接，并防止该设备自动激活其他连接，而无需人工干预。 如果连接的connection.autoconnect标志设置为yes，若防止断开连接的设备上再次自动启动。 在这种情况下，请使用nmcli device connect命令而不是nmcli connection down命令。</p>
+<h2 id="4-6-查看仅由NetworkManager识别的设备及其状态"><a href="#4-6-查看仅由NetworkManager识别的设备及其状态" class="headerlink" title="4.6 查看仅由NetworkManager识别的设备及其状态"></a>4.6 查看仅由NetworkManager识别的设备及其状态</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli device status </span><br><span class="line">DEVICE      TYPE      STATE         CONNECTION </span><br><span class="line">ens33       ethernet  connected     ens33      </span><br><span class="line">virbr0      bridge    connected     virbr0     </span><br><span class="line">ens37       ethernet  disconnected  --         </span><br><span class="line">lo          loopback  unmanaged     --         </span><br><span class="line">virbr0-nic  tun       unmanaged     --</span><br></pre></td></tr></table></figure>
+<h2 id="4-7-查看设备的常规信息"><a href="#4-7-查看设备的常规信息" class="headerlink" title="4.7 查看设备的常规信息"></a>4.7 查看设备的常规信息</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli device show</span><br><span class="line">GENERAL.DEVICE:                         ens33</span><br><span class="line">GENERAL.TYPE:                           ethernet</span><br><span class="line">GENERAL.HWADDR:                         00:0C:29:97:B1:F5</span><br><span class="line">GENERAL.MTU:                            1500</span><br><span class="line">GENERAL.STATE:                          100 (connected)</span><br><span class="line">GENERAL.CONNECTION:                     ens33</span><br><span class="line">GENERAL.CON-PATH:                       &#x2F;org&#x2F;freedesktop&#x2F;NetworkManager&#x2F;ActiveC&gt;</span><br><span class="line">WIRED-PROPERTIES.CARRIER:               on</span><br><span class="line">IP4.ADDRESS[1]:                         192.168.60.128&#x2F;24</span><br><span class="line">&lt;部分省略&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="4-8-检查NetworkManager的整体状态"><a href="#4-8-检查NetworkManager的整体状态" class="headerlink" title="4.8 检查NetworkManager的整体状态"></a>4.8 检查NetworkManager的整体状态</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli general status </span><br><span class="line">STATE      CONNECTIVITY  WIFI-HW  WIFI     WWAN-HW  WWAN    </span><br><span class="line">connected  full          enabled  enabled  enabled  enabled </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在简洁模式下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli -t -f STATE general</span><br><span class="line">connected</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="4-9-查看NetworkManager日志记录状态"><a href="#4-9-查看NetworkManager日志记录状态" class="headerlink" title="4.9 查看NetworkManager日志记录状态"></a>4.9 查看NetworkManager日志记录状态</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli general logging</span><br><span class="line">LEVEL  DOMAINS                                                                                             </span><br><span class="line"></span><br><span class="line">INFO   PLATFORM,RFKILL,ETHER,WIFI,BT,MB,DHCP4,DHCP6,PPP,IP4,IP6,AUTOIP4,DNS,VPN,SHARING,SUPPLICANT,AGENTS,SETTINGS,SUSPEND,CORE,DEVICE,OLPC,INFINIBAND,FIREWALL,ADSL,BOND,VLAN,BRIDGE,TEAM,CONCHECK,DCB,DISPATCH,AUDIT,SYSTEMD,PROXY </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+<h1 id="5-一些nmcli命令的缩写"><a href="#5-一些nmcli命令的缩写" class="headerlink" title="5. 一些nmcli命令的缩写"></a>5. 一些nmcli命令的缩写</h1><table>
+<thead>
+<tr>
+<th align="center">命令(nmcli command)</th>
+<th align="center">缩写(abbreviation)</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">nmcli general status</td>
+<td align="center">nmcli g</td>
+<td align="center">检查NetworkManager的整体状态</td>
+</tr>
+<tr>
+<td align="center">nmcli general logging</td>
+<td align="center">nmcli g log</td>
+<td align="center">查看NetworkManager日志记录状态</td>
+</tr>
+<tr>
+<td align="center">nmcli connection show</td>
+<td align="center">nmcli con show or nmcli c</td>
+<td align="center">查看所有连接</td>
+</tr>
+<tr>
+<td align="center">nmcli connection show –active</td>
+<td align="center">nmcli con show -a or nmcli c -a</td>
+<td align="center">仅查看当前活动的连接</td>
+</tr>
+<tr>
+<td align="center">nmcli device status</td>
+<td align="center">nmcli dev or nmcli d</td>
+<td align="center">查看仅由NetworkManager识别的设备及其状态</td>
+</tr>
+<tr>
+<td align="center">nmcli device show</td>
+<td align="center">nmcli dev show or nmcli d show</td>
+<td align="center">查看设备的常规信息</td>
+</tr>
+</tbody></table>
+<h1 id="6-使用nmcli设置受管或不受管的设备"><a href="#6-使用nmcli设置受管或不受管的设备" class="headerlink" title="6. 使用nmcli设置受管或不受管的设备"></a>6. 使用nmcli设置受管或不受管的设备</h1><h2 id="6-1-列出当前可用的网络连接："><a href="#6-1-列出当前可用的网络连接：" class="headerlink" title="6.1 列出当前可用的网络连接："></a>6.1 列出当前可用的网络连接：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli con show</span><br><span class="line">NAME     UUID                                  TYPE      DEVICE  </span><br><span class="line">ens33    8f008d70-827e-4357-a043-e8114cf43b3e  ethernet  ens33   </span><br><span class="line">ens37    fc1bcfed-6d17-4dd6-9a23-49d37217d429  ethernet  ens37   </span><br><span class="line">My-WiFi  8ce4176e-4808-4ab7-8b49-20e333e0b58d  wifi      wls35u1 </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+<p><font color=red>注意</font>: 输出中的NAME字段始终表示连接ID（名称）。 它不是接口名称，即使它看起来一样。 在上面显示的第二个连接中，NAME字段中的ens37是用户给应用于接口ens37的配置文件的连接ID。 在显示的最后一个连接中，用户已将连接ID My-WiFi分配给接口wls35u1。</p>
+<h2 id="6-2-检查可用设备"><a href="#6-2-检查可用设备" class="headerlink" title="6.2 检查可用设备"></a>6.2 检查可用设备</h2><ul>
+<li>添加以太网连接意味着创建配置文件，然后将其分配给设备。 在创建新的配置文件之前，请按照以下说明检查可用的设备：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli device status</span><br><span class="line">DEVICE      TYPE      STATE      CONNECTION </span><br><span class="line">ens33       ethernet  connected  ens33      </span><br><span class="line">ens37       ethernet  connected  ens37      </span><br><span class="line">wls35u1     wifi      connected  My-WiFi    </span><br><span class="line">virbr0      bridge    connected  virbr0     </span><br><span class="line">lo          loopback  unmanaged  --         </span><br><span class="line">virbr0-nic  tun       unmanaged  --         </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure></li>
+<li>设置不受 NetworkManager管理的设备：<br>格式<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmcli device set ifname managed no</span><br></pre></td></tr></table></figure>
+例：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli device set ens37 managed no</span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# nmcli device status</span><br><span class="line">DEVICE      TYPE      STATE      CONNECTION </span><br><span class="line">ens33       ethernet  connected  ens33      </span><br><span class="line">wls35u1     wifi      connected  My-WiFi    </span><br><span class="line">virbr0      bridge    connected  virbr0     </span><br><span class="line">ens37       ethernet  unmanaged  --         </span><br><span class="line">lo          loopback  unmanaged  --         </span><br><span class="line">virbr0-nic  tun       unmanaged  --         </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+<font color=red>注意</font>:当您将设备设置为非管理状态时，NetworkManager不会对其进行控制。 如果要配置的设备被列为unmanaged设备，则nmcli命令对此设备没有任何影响。 但是，该设备仍处于连接状态。</li>
+</ul>
+<h1 id="7-使用nmcli创建连接配置文件"><a href="#7-使用nmcli创建连接配置文件" class="headerlink" title="7. 使用nmcli创建连接配置文件"></a>7. 使用nmcli创建连接配置文件</h1><p>您可以创建要与设备关联的连接配置文件。</p>
+<h2 id="7-1-使用nmcli为NetworkManager创建新配置文件的基本格式："><a href="#7-1-使用nmcli为NetworkManager创建新配置文件的基本格式：" class="headerlink" title="7.1 使用nmcli为NetworkManager创建新配置文件的基本格式："></a>7.1 使用nmcli为NetworkManager创建新配置文件的基本格式：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmcli c add &#123;COMMON_OPTIONS&#125; [IP_OPTIONS]&#x2F;[NETMASK] [GATEWAY]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>其中{COMMON_OPTIONS}是别名或属性名称</li>
+<li>其中[IP_OPTIONS]是IP地址：<ul>
+<li>对于IPv4地址：ip4</li>
+<li>对于IPv6地址：ip6</li>
+</ul>
+</li>
+<li>其中[NETMASK]是网络掩码的宽度。 例如，255.255.255.0是前缀192.168.100.0/24的网络掩码。</li>
+<li>其中[GATEWAY]是网关信息：<ul>
+<li>对于IPv4地址：gw4</li>
+<li>对于IPv6地址：gw6</li>
+</ul>
+</li>
+</ul>
+<h2 id="7-2-语法格式示例"><a href="#7-2-语法格式示例" class="headerlink" title="7.2 语法格式示例"></a>7.2 语法格式示例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmcli connection add type ethernet con-name connection-name ifname interface-name ip4 address&#x2F;network mask gw4 address</span><br></pre></td></tr></table></figure>
+<ul>
+<li>要使用IPv4地址创建连接配置文件：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli c add type ethernet ifname ens37 con-name &quot;My Connection&quot; ip4 192.168.1.100&#x2F;24 gw4 192.168.1.254</span><br><span class="line">Connection &#39;My Connection&#39; (8a63d3d0-4c60-49c6-b24b-0a28be91ab35) successfully added.</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure></li>
+<li>要激活创建的连接：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli c up &quot;My Connection&quot; </span><br><span class="line">Connection successfully activated (D-Bus active path: &#x2F;org&#x2F;freedesktop&#x2F;NetworkManager&#x2F;ActiveConnection&#x2F;12)</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure></li>
+<li>要查看创建的连接：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# nmcli c show &quot;My Connection&quot; </span><br><span class="line">connection.id:                          My Connection</span><br><span class="line">connection.uuid:                        8a63d3d0-4c60-49c6-b24b-0a28be91ab35</span><br><span class="line">connection.stable-id:                   --</span><br><span class="line">connection.type:                        802-3-ethernet</span><br><span class="line">connection.interface-name:              ens37</span><br><span class="line">connection.autoconnect:                 yes</span><br><span class="line">&lt;部分省略&gt;</span><br></pre></td></tr></table></figure></li>
+<li>加入-o参数，则显示更紧凑<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli  -o c show &quot;My Connection&quot; </span><br><span class="line">connection.id:                          My Connection</span><br><span class="line">connection.uuid:                        8a63d3d0-4c60-49c6-b24b-0a28be91ab35</span><br><span class="line">connection.type:                        802-3-ethernet</span><br><span class="line">connection.interface-name:              ens37</span><br><span class="line">connection.timestamp:                   1586968719</span><br><span class="line">ipv4.method:                            manual</span><br><span class="line">ipv4.addresses:                         192.168.1.100&#x2F;24</span><br><span class="line">ipv4.gateway:                           192.168.1.254</span><br></pre></td></tr></table></figure>
+<h1 id="8-使用nmcli修改连接配置文件"><a href="#8-使用nmcli修改连接配置文件" class="headerlink" title="8. 使用nmcli修改连接配置文件"></a>8. 使用nmcli修改连接配置文件</h1>您可以修改连接配置文件的现有配置。</li>
+<li>要修改连接配置文件的一个或多个属性，请使用以下命令：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmcli c modify XXX</span><br></pre></td></tr></table></figure></li>
+<li>例如，要将connection.id从“My Connection”更改为“My favorite connection”，并将connection.interface-name更改为ens37：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli c modify &quot;My Connection&quot; connection.id &quot;My favorite connection&quot; connection.interface-name ens37</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure></li>
+<li>要在使用nmcli修改连接后应用更改，请输入以下命令再次激活连接：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# nmcli con up &quot;My favorite connection&quot;</span><br><span class="line">Connection successfully activated (D-Bus active path: &#x2F;org&#x2F;freedesktop&#x2F;NetworkManager&#x2F;ActiveConnection&#x2F;13)</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>交个朋友呗</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    握手
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/reward/wechatpay.png" alt="Fifty Two 微信赞赏">
+        <p>微信赞赏</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/CentOS/" rel="tag"><i class="fa fa-tag"></i> CentOS</a>
+              <a href="/tags/nmcli/" rel="tag"><i class="fa fa-tag"></i> nmcli</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/Linux/2020/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="prev" title="VMware安装CentOS8操作系统,GPT模式分区">
+      <i class="fa fa-chevron-left"></i> VMware安装CentOS8操作系统,GPT模式分区
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/Linux/2020/SSH%E8%BF%9E%E6%8E%A5CentOS8/" rel="next" title="SSH方式连接CentOS">
+      SSH方式连接CentOS <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80OTUwOC8yNTk5OQ=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-了解nmcli"><span class="nav-text">1. 了解nmcli</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-最常见的nmcli命令是nmcli-device和nmcli-connection："><span class="nav-text">1.1 最常见的nmcli命令是nmcli device和nmcli connection：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-按Tab命令补全"><span class="nav-text">1.2 按Tab命令补全</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-使用nmcli的基本格式为："><span class="nav-text">2. 使用nmcli的基本格式为：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-其中-OPTIONS-可以是可选选项，例如："><span class="nav-text">2.1 其中[OPTIONS]可以是可选选项，例如：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-其中“OBJECT”可以是以下选项之一：general-常规-，networking-网络-，radio-无线电-，connection-连接-，device-设备-，agent-代理-和monitor-监视器-。"><span class="nav-text">2.2 其中“OBJECT”可以是以下选项之一：general(常规)，networking(网络)，radio(无线电)，connection(连接)，device(设备)，agent(代理)和monitor(监视器)。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-其中，COMMAND是必需的nmcli命令。"><span class="nav-text">2.3 其中，COMMAND是必需的nmcli命令。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-其中的help是列出与指定对象相关的可用操作："><span class="nav-text">2.4 其中的help是列出与指定对象相关的可用操作：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-nmcli属性名称和别名概述"><span class="nav-text">3. nmcli属性名称和别名概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-先决条件"><span class="nav-text">3.1 先决条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-nmcli命令最重要的选项（例如show，up，down）是："><span class="nav-text">3.2 nmcli命令最重要的选项（例如show，up，down）是：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Aliases-别名-和property-names-属性名称"><span class="nav-text">3.3 Aliases(别名)和property names(属性名称)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-常用命令"><span class="nav-text">4. 常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-查看所有连接"><span class="nav-text">4.1 查看所有连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-仅查看当前活动的连接"><span class="nav-text">4.2 仅查看当前活动的连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-停用连接"><span class="nav-text">4.3 停用连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-激活连接"><span class="nav-text">4.4 激活连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-断开设备连接以防止其再次自动启动"><span class="nav-text">4.5 断开设备连接以防止其再次自动启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-查看仅由NetworkManager识别的设备及其状态"><span class="nav-text">4.6 查看仅由NetworkManager识别的设备及其状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-7-查看设备的常规信息"><span class="nav-text">4.7 查看设备的常规信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-8-检查NetworkManager的整体状态"><span class="nav-text">4.8 检查NetworkManager的整体状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-9-查看NetworkManager日志记录状态"><span class="nav-text">4.9 查看NetworkManager日志记录状态</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-一些nmcli命令的缩写"><span class="nav-text">5. 一些nmcli命令的缩写</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-使用nmcli设置受管或不受管的设备"><span class="nav-text">6. 使用nmcli设置受管或不受管的设备</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-列出当前可用的网络连接："><span class="nav-text">6.1 列出当前可用的网络连接：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-检查可用设备"><span class="nav-text">6.2 检查可用设备</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-使用nmcli创建连接配置文件"><span class="nav-text">7. 使用nmcli创建连接配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-使用nmcli为NetworkManager创建新配置文件的基本格式："><span class="nav-text">7.1 使用nmcli为NetworkManager创建新配置文件的基本格式：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2-语法格式示例"><span class="nav-text">7.2 语法格式示例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-使用nmcli修改连接配置文件"><span class="nav-text">8. 使用nmcli修改连接配置文件</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Fifty Two"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Fifty Two</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element">
+    天道轮回，苍天饶过谁
+  </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fifty Two</span>
+</div>
+有一种孤独，叫52赫兹
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+    <div id="pjax">
+  
+
+  
+
+  
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'http://yoursite.com/Linux/2020/nmcli%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/',]
+      });
+      });
+  </script>
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+    </div>
+<!-- 小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+<!--卖萌-->
+<script type="text/javascript" src="/js/src/dytitle.js"></script>
+</body>
+</html>
+<script type="text/javascript" src="/js/src/particle.js"></script>

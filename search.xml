@@ -1,40 +1,914 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>CentOS8网络配置</title>
-    <url>/Linux/2020/CentOS8%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<p>这是我的第一篇文件。很高兴，我的博客终于搭建完毕了。<br>Linux操作系统的优势之一就是网络功能，Linux版本繁多，各个版本的配置大体相同，这里我就用CentOS8来配置网络。<br>我大学接触的Linux为Redhat5，那时候还不太感兴趣，没有过多学习，等到了7版本，偶然间有了兴趣，想搭建一个博客，</p>
+    <title>SSH方式连接CentOS</title>
+    <url>/Linux/2020/SSH%E8%BF%9E%E6%8E%A5CentOS8/</url>
+    <content><![CDATA[<p>一般情况下，很少在服务器上连接键盘和显示器进行管理，都是通过远程连接方式管理和维护。对于SSH，相信大家都比我熟悉，我不多介绍(因为我不懂)</p>
+<a id="more"></a>
+
+<h1 id="一、常见的SSH登录客户端介绍"><a href="#一、常见的SSH登录客户端介绍" class="headerlink" title="一、常见的SSH登录客户端介绍"></a>一、常见的SSH登录客户端介绍</h1><ol>
+<li><p>putty(我非常喜欢的软件)</p>
+<ul>
+<li>官网：<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html" target="_blank" rel="noopener">https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html</a> (地址可能有错)</li>
+<li>大小：约1.2M （小到没朋友，随身携带方便，不占空间，给别人发送时还省流量）</li>
+<li>是否需要安装：便携版直接运行</li>
+<li>语言：English (有汉化版)</li>
+<li>费用：免费</li>
+</ul>
+</li>
+<li><p>SecureCRT(老司机常备的软件，用的人特别多)</p>
+<ul>
+<li>官网：<a href="https://www.vandyke.com/products/securecrt/" target="_blank" rel="noopener">https://www.vandyke.com/products/securecrt/</a></li>
+<li>大小：约35M</li>
+<li>是否需要安装：需要安装</li>
+<li>语言：English (有汉化版）</li>
+<li>费用：官网有介绍</li>
+</ul>
+</li>
+<li><p>Xshell (大学的时候，我常用的软件)</p>
+<ul>
+<li>官网：<a href="https://www.netsarang.com/zh/free-for-home-school/" target="_blank" rel="noopener">https://www.netsarang.com/zh/free-for-home-school/</a></li>
+<li>大小：约42M</li>
+<li>是否需要安装：需要安装</li>
+<li>语言：支持中文</li>
+<li>费用：有免费个人版</li>
+</ul>
+</li>
+<li><p>MobaXterm(最近我发现的，感觉还不错，不用点技术手段，估计得下载一天) </p>
+<ul>
+<li>官网：<a href="https://mobaxterm.mobatek.net/" target="_blank" rel="noopener">https://mobaxterm.mobatek.net/</a></li>
+<li>大小：约26M</li>
+<li>是否需要安装：有便携版</li>
+<li>语言：English (暂未找到汉化版，我英语就是渣渣)</li>
+<li>费用：有免费版本</li>
+<li>自带SFTP</li>
+</ul>
+</li>
+<li><p>FinalShell （据说是国人开发的，听说挺不错，外观可视化效果好，我不太了解）</p>
+<ul>
+<li>官网： <a href="http://www.hostbuf.com/" target="_blank" rel="noopener">http://www.hostbuf.com/</a></li>
+<li>大小：约70M</li>
+<li>是否需要安装：需要安装</li>
+<li>语言：支持中文</li>
+<li>费用：有免费版本</li>
+<li>自带SFTP</li>
+</ul>
+</li>
+<li><p>通过系统自带的程序连接CentOS</p>
+<ul>
+<li>Windows系统，确保已开启SSH客户端，然后打开CMD，然后输入ssh 用户名@IP地址 进行连接<br>如：ssh <a href="mailto:root@192.168.60.128">root@192.168.60.128</a></li>
+<li>Linux系统，在命令行界面，输入ssh 用户名@IP地址 进行连接，如：ssh <a href="mailto:root@192.168.60.128">root@192.168.60.128</a></li>
+</ul>
+</li>
+</ol>
+<h1 id="二、获取CentOS的IP地址"><a href="#二、获取CentOS的IP地址" class="headerlink" title="二、获取CentOS的IP地址"></a>二、获取CentOS的IP地址</h1><ol>
+<li>获取CentOS的IP地址，活动–&gt; 终端 –&gt; 打开的界面输入ip address然后回车，即可看到ip地址<br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/2-1_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/2-1_02.png" alt="https://blog.hellocui.com"></li>
+</ol>
+<h1 id="三、连接"><a href="#三、连接" class="headerlink" title="三、连接"></a>三、连接</h1><ol>
+<li><p>putty连接<br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-1_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-1_02.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-1_03.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>SecureCRT连接<br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-2_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-2_02.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-2_03.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-2_04.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/SSH%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5CentOS/3-2_05.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>系统自带客户端</p>
+<ul>
+<li>Windows10<br>运行 –&gt; cmd –&gt; 输入 ssh @192.168.60.128<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Users\c&gt;ssh root@192.168.60.128</span><br><span class="line">The authenticity of host &#39;192.168.60.128 (192.168.60.128)&#39; can&#39;t be established.</span><br><span class="line">ECDSA key fingerprint is SHA256:jwkAKnY6XAzGMJczLqAMIgW1hRe&#x2F;zLLC+mKsrjVlBMI.</span><br><span class="line">Are you sure you want to continue connecting (yes&#x2F;no)? yes</span><br><span class="line">Warning: Permanently added &#39;192.168.60.128&#39; (ECDSA) to the list of known hosts.</span><br><span class="line">root@192.168.60.128&#39;s password:</span><br><span class="line">Activate the web console with: systemctl enable --now cockpit.socket</span><br><span class="line"></span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure></li>
+<li>Linux客户端, 在命令行下直接输入：ssh @192.168.60.128<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# ssh root@192.168.60.128</span><br><span class="line">The authenticity of host &#39;192.168.60.128 (192.168.60.128)&#39; can&#39;t be established.</span><br><span class="line">ECDSA key fingerprint is SHA256:jwkAKnY6XAzGMJczLqAMIgW1hRe&#x2F;zLLC+mKsrjVlBMI.</span><br><span class="line">Are you sure you want to continue connecting (yes&#x2F;no&#x2F;[fingerprint])? yes</span><br><span class="line">Warning: Permanently added &#39;192.168.60.128&#39; (ECDSA) to the list of known hosts.</span><br><span class="line">root@192.168.60.128&#39;s password:</span><br><span class="line">Activate the web console with: systemctl enable --now cockpit.socket</span><br><span class="line"></span><br><span class="line">Last login: Fri Apr 10 23:58:54 2020 from 192.168.60.1</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<div style="text-align: right"> 2020年4月 <br> https://blog.hellocui.com </div>]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>CentOS</tag>
+        <tag>SSH连接CentOS8</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>VMware安装CentOS8操作系统,GPT模式分区</title>
+    <url>/Linux/2020/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</url>
+    <content><![CDATA[<p>CentOS（Community Enterprise Operating System，中文意思是社区企业操作系统）是Linux发行版之一，它是来自于Red Hat Enterprise Linux依照开放源代码规定释出的源代码所编译而成。由于出自同样的源代码，因此有些要求高度稳定性的服务器以CentOS替代商业版的Red Hat Enterprise Linux使用。两者的不同，在于CentOS完全开源。</p>
+<a id="more"></a>
+<p>在这里絮叨几句，14年买第一台笔记本，Windowns8.1操作系统，磁盘分区为GPT，我对电脑一窍不通(买完笔记本后，兴高采烈的回到家我却不会开机，还专门去了一趟专卖店，才知道电池没电了)，我是计算机行业的学生，第一堂课讲的就是安装Windows操作系统，用的是老毛桃、大白菜等U盘启动方式安装GHOST操作系统，然后就是一堆广告。当初(2014年)电脑维修店想装系统，他们唯一的办法就是把整块磁盘格式化，然后以MBR方式安装Windows7系统，到底什么是MBR，什么是GPT呢，我找到的资料是这样解释的：</p>
+<ul>
+<li>Legacy和UEFI指的是系统引导方式(Legacy为传统BIOS，UEFI为新式BIOS)，MBR和GPT指的是磁盘分区表类型。</li>
+<li>由于UFEI和Legacy是两种不同的引导方式，UEFI引导windows系统的文件为winload.efi，而Legacy引导windows系统的文件为winload.exe</li>
+<li>一般情况下都是Legacy+MBR， UEFI+GPT这两种组合。但Legacy+GPT，UEFI+MBR也可以实现。</li>
+<li>分区类型<br>MBR(主引导记录)是传统的分区表类型，最大缺点是不支持容量大于2T的硬盘。<br>MBR分区表最多只能支持4个主分区或三个主分区+1个扩展分区(逻辑分区不限制)<br>GPT(GUID分区表)是新型的分区表类型，可支持最大容量为18EB的硬盘，这个数量相当庞大(1EB=1024PB,1PB=1024TB,1TB=1024GB)<br>GPT分区大小限制取决于操作系统及其文件系统。GPT还允许几乎无限数量的分区，在Windows系统上可以划分128个主分区，近几年新出的笔记本基本上都是GPT分区类型</li>
+<li>启动过程<br>Legacy启动过程：开机 –&gt; BIOS初始化 –&gt; BIOS自检 –&gt; 引导操作系统 –&gt; 进入系统<br>UEFI启动过程：开机 –&gt; UEFI初始化 –&gt; 引导操作系统 –&gt; 进入操作系统</li>
+</ul>
+<h2 id="一、准备材料"><a href="#一、准备材料" class="headerlink" title="一、准备材料"></a>一、准备材料</h2><ol>
+<li><p>下载并安装vmware workstation软件<br>目前(2020年4月)最新版本为15.5.2。这个软件安装比较简单，一直选择“下一步”就可以了，若遇到问题，推荐百度搜索答案，或者邮箱联系我</p>
+</li>
+<li><p>下载CentOS8.1 可以选择官方网站下载，也可以把下面的连接放入迅雷中进行下载，文件较大，约7GB<br>下载地址：<a href="http://ftp.sjtu.edu.cn/centos/8.1.1911/isos/x86_64/CentOS-8.1.1911-x86_64-dvd1.iso" target="_blank" rel="noopener">http://ftp.sjtu.edu.cn/centos/8.1.1911/isos/x86_64/CentOS-8.1.1911-x86_64-dvd1.iso</a></p>
+</li>
+<li><p>若真实服务器安装，可光盘引导安装，若无光盘，可以准备U盘进行刻录，然后通过U盘启动。</p>
+</li>
+</ol>
+<h2 id="二、打开VMware，创建所需环境"><a href="#二、打开VMware，创建所需环境" class="headerlink" title="二、打开VMware，创建所需环境"></a>二、打开VMware，创建所需环境</h2><ol>
+<li><p>新建虚拟机，(快捷键Ctrl+N)<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-01.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>选择“典型”，然后点击“下一步”<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-02.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>选择“稍候安装操作系统”，(若选择“安装程序光盘镜像文件”系统会自动创建虚拟环境，不利于实验）<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-03.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>选择客户机操作系统，VMware暂未收录CentOS8，这里就选择”CentOS7 64位”<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-04.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>命名虚拟机、定义存储位置<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-05.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>配置磁盘容量，我电脑磁盘空间有限，就用默认的20GB了，可根据使用环境自行调整，若后期不够了，磁盘是可以添加的<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-06.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>选择“完成”<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-07.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>这里我们选择自定义硬件<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-08.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>配置内存、处理器、选择安装光盘，内存和光盘我就不演示了，根据自己的实际情况配置，建议内存在2GB或以上，网卡模式我选择的是桥接模式<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-09_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-09_02.png" alt="https://blog.hellocui.com"></p>
+</li>
+</ol>
+<h2 id="三、安装系统"><a href="#三、安装系统" class="headerlink" title="三、安装系统"></a>三、安装系统</h2><ol>
+<li><p>选择“开启虚拟机”<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-1.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>看到这个界面，将光标停留在第一项，当文字变为白色<br>此处需要注意一下，若以MBR模式分区，选择第一项然后回车即可，<br>若以GPT模式分区，选择第一项之后，按一下键盘的“TAB键”，会显示完整配置项，最下行输入 inst.gpt 前面包含一个空格，然后按回车健，这里推荐使用GPT模式分区，我的安装方式也是基于GPT模式分区方式安装的<br> 解释一下：</p>
+<pre><code>第一项表示安装CentOS 8
+第二项表示校验光盘，然后安装CentOS8
+第三项为故障排除模式，如，当启动项出故障了，可以选择第三项进行恢复，后期博客中我会做演示</code></pre><p><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-2.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>等待片刻，会看到如下界面语言选择界面，由于是初步使用，默认为英文，若想使用简体中文，则在搜索框中输入Chinese即可出现中文，然后按照步骤选择即可<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-3.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>选择“安装目的地”<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-4.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>安装位置就是刚刚创建的20GB磁盘空间，我们这里选择自定义分区，若嫌麻烦，可以选择自动<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-5.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>分区建议<br>分区建议和说明：</p>
+<ul>
+<li>boot分区：         <ul>
+<li>作用：引导分区，包含了系统启动的必要内核文件，即使根分区顺坏也能正常引导启动 一般这些文件所占空间在200M以下，</li>
+<li>分区建议：分区的时候可选100M-500M之间,如果空间足够用，建议分300-500M。避免由于长期使用的冗余文件塞满这个分区。</li>
+<li>分区格式：建议ext4，按需求更改</li>
+<li>MBR方式引导为：/boot</li>
+<li>UEFI方式引导为：/boot 和 /biosboot</li>
+</ul>
+</li>
+<li>/分区（根分区）：         <ul>
+<li>作用：所有的文件都从这里开始。</li>
+<li>分区建议：建议15G以上。看需求，主要占空间在哪儿就在那里分大容量</li>
+<li>分区格式：建议xfs,按需求更改<ul>
+<li>swap分区：</li>
+</ul>
+</li>
+<li>作用：交换分区，虚拟内存，在内存不够用时占用硬盘的虚拟内存来进行临时数据的存放</li>
+<li>分区建议：建议1-16G，一般是物理内存大小的2倍，比如你电脑是4G的物理内存，swap分区可以是8G，若真的长时间使用swap分区了，可以考虑增加物理内存</li>
+<li>分区格式：swap格式<ul>
+<li>home分区</li>
+</ul>
+</li>
+<li>作用：存放用户数据，HOME的结构一般是 HOME/userName/userFile，如果不分则默认在/目录下</li>
+<li>分区建议：如果用户数据多可以将此分区适当增大，请参考“根分区”分区建议；一般硬盘的主要容量几乎都在Home分区和根分区下</li>
+<li>分区格式：建议xfs，按需求更改<ul>
+<li>var分区</li>
+</ul>
+</li>
+<li>作用：用于log日志的文件的存放，如果不分则默认在/目录下</li>
+<li>分区建议：如果你安装的linux是用于服务器或者经常做日志分析，请划分var分区，避免日志文件不断膨胀塞满导致根分区而引发问题。</li>
+<li>分区格式：建议xfs，按需求更改</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>创建biosboot分区,不用配置大小，默认大小为2M<br>建议使用LVM分区格式，后期可以动态扩容<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-7.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>创建boot分区，配置200M，可根据实际需求适当调试大小<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-8.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>创建swap分区，这里设置为2G<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-9.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>创建根分区，分区大小为余下的所有<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-10.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>分完分区后按下左上角的“完成”按钮，之后会弹出确认框，选择接受更改即可<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-11.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>软件选择，处于初次使用，这里我选择”带GUI的服务器”进行安装，我个人偏向于“虚拟化主机”，即纯命令行<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-12_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-12_02.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>选择时区，我们选择“中国-上海”即可<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-13_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-13_02.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>配置网络<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-14_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-14_02.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>可选项：取消KDUMP<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-15_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-15_02.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>开始安装<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-16.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>配置root密码<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-17_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-17_02.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>等待安装即可，安装完毕后会出现下列提示，点击“重启”即可<br>此处需要注意一下：用安装介质为光盘、U盘安装并设置为第一启动项，此时请移除安装介质或将启动项设置为最后<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-18.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>接受许可<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-19_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-19_02.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-19_03.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>配置向导<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-20_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-20_02.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-20_03.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>若在第26步骤中未创建普通用户，则在此处会提示创建普通用户，否则无法进入图形界面<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-21_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-21_02.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>选择“开始使用CentOS Linux(S)”<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-31.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>登录操作系统<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-23_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-23_02.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-23_03.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-23_04.png" alt="https://blog.hellocui.com"></p>
+</li>
+</ol>
+<hr>
+<div style="text-align: right"> 2020年4月 <br> https://blog.hellocui.com </div>
+
+
+
+
+
+
+
+
+
+
+
+
 ]]></content>
       <categories>
         <category>Linux</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
-        <tag>centos</tag>
+        <tag>CentOS</tag>
+        <tag>安装系统</tag>
       </tags>
   </entry>
   <entry>
-    <title>华为路由器开启SSH</title>
-    <url>/%E8%B7%AF%E7%94%B1%E4%B8%8E%E4%BA%A4%E6%8D%A2%E6%9C%BA%E6%8A%80%E6%9C%AF/2020/%E5%8D%8E%E4%B8%BA%E8%B7%AF%E7%94%B1%E5%99%A8%E5%BC%80%E5%90%AFSSH/</url>
-    <content><![CDATA[<h2 id="华为路由器开启SSH"><a href="#华为路由器开启SSH" class="headerlink" title="华为路由器开启SSH"></a>华为路由器开启SSH</h2><p>SSH 为 Secure Shell 的缩写，由 IETF 的网络小组（Network Working Group）所制定；SSH 为建立在应用层基础上的安全协议。SSH 是较可靠，专为远程登录会话和其他网络服务提供安全性的协议。利用 SSH 协议可以有效防止远程管理过程中的信息泄露问题。SSH最初是UNIX系统上的一个程序，后来又迅速扩展到其他操作平台。SSH在正确使用时可弥补网络中的漏洞。SSH客户端适用于多种平台。几乎所有UNIX平台—包括HP-UX、Linux、AIX、Solaris、Digital UNIX、Irix，以及其他平台，都可运行SSH。</p>
+    <title>网卡和nmcli介绍</title>
+    <url>/Linux/CentOS/2020/%E7%BD%91%E5%8D%A1%E5%92%8Cnmcli%E4%BB%8B%E7%BB%8D/</url>
+    <content><![CDATA[<p>nmcli（NetworkManager命令行界面）是用于通过 NetworkManager配置网络的命令行实用程序。nmcli用于创建，显示，编辑，删除，激活和停用网络连接，以及控制和显示网络设备状态。</p>
 <a id="more"></a>
 
-<ol>
-<li>网络拓扑<br><img data-src="/img/%E8%B7%AF%E7%94%B1%E4%B8%8E%E4%BA%A4%E6%8D%A2%E6%9C%BA%E6%8A%80%E6%9C%AF/%E5%8D%8E%E4%B8%BA%E8%B7%AF%E7%94%B1%E5%99%A8%E5%BC%80%E5%90%AFSSH/01.png" alt="blog.hellocui.com"></li>
-<li>AR1配置<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">进入系统视图</span><br><span class="line">&lt;Huawei&gt;system-view</span><br><span class="line">Enter system view, return user view with Ctrl+Z.</span><br><span class="line">更改名字</span><br><span class="line">[Huawei]sysname AR1</span><br><span class="line">进入g0&#x2F;0&#x2F;0接口</span><br><span class="line">[AR1]inter g0&#x2F;0&#x2F;0</span><br><span class="line">配置ip地址</span><br><span class="line">[AR1-GigabitEthernet0&#x2F;0&#x2F;0]ip address 1.1.1.1 30</span><br><span class="line">退出接口试图</span><br><span class="line">[AR1-GigabitEthernet0&#x2F;0&#x2F;0]quit</span><br><span class="line">[AR1]</span><br><span class="line">进入aaa模式</span><br><span class="line">[AR1]aaa</span><br><span class="line">[AR1-aaa]</span><br><span class="line">创建用户名cui和密码123456</span><br><span class="line">[AR1-aaa]local-user cui password cipher 123456</span><br><span class="line">Info: Add a new user.</span><br><span class="line">设置用户级别为15，最高等级</span><br><span class="line">[AR1-aaa]local-user cui privilege level 15</span><br><span class="line">设置允许该用户允许的服务ssh</span><br><span class="line">[AR1-aaa]local-user cui service-type ssh</span><br><span class="line">[AR1-aaa]quit</span><br><span class="line">进入vty通道</span><br><span class="line">[AR1]user-interface vty 0 4</span><br><span class="line">vty允许SSH登录</span><br><span class="line">[AR1-ui-vty0-4]protocol inbound ssh</span><br><span class="line">通道认证模式使用aaa模式</span><br><span class="line">[AR1-ui-vty0-4]authentication-mode aaa</span><br><span class="line">[AR1-ui-vty0-4]quit</span><br><span class="line">开启ssh服务</span><br><span class="line">[AR1]stelnet server enable</span><br><span class="line">Info: Succeeded in starting the STELNET server.</span><br></pre></td></tr></table></figure></li>
-<li>AR2配置<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;Huawei&gt;system-view</span><br><span class="line">Enter system view, return user view with Ctrl+Z.</span><br><span class="line">[Huawei]sysname AR2</span><br><span class="line">[AR2]inter g0&#x2F;0&#x2F;0</span><br><span class="line">[AR2-GigabitEthernet0&#x2F;0&#x2F;0]</span><br><span class="line">[AR2-GigabitEthernet0&#x2F;0&#x2F;0]ip address 1.1.1.2 30</span><br><span class="line">[AR2-GigabitEthernet0&#x2F;0&#x2F;0]quit</span><br><span class="line">[AR2]</span><br><span class="line">[AR2]</span><br><span class="line">用ssh方式登录1.1.1.1</span><br><span class="line">[AR2]stelnet 1.1.1.1</span><br><span class="line">输入用户名cui</span><br><span class="line">Please input the username:cui</span><br><span class="line">Trying 1.1.1.1 ...</span><br><span class="line">Press CTRL+K to abort</span><br><span class="line">Connected to 1.1.1.1 ...</span><br><span class="line">提示服务器未通过身份验证，此处选择y，否则中断链接</span><br><span class="line">The server is not authenticated. Continue to access it? (y&#x2F;n)[n]:y</span><br><span class="line">Mar 29 2020 12:48:44-08:00 AR2 %%01SSH&#x2F;4&#x2F;CONTINUE_KEYEXCHANGE(l)[2]:The server h</span><br><span class="line">ad not been authenticated in the process of exchanging keys. When deciding wheth</span><br><span class="line">er to continue, the user chose Y. </span><br><span class="line">[AR2]</span><br><span class="line">是否保存公钥，此处选择Y，否则中断链接</span><br><span class="line">Save the server&#39;s public key? (y&#x2F;n)[n]:y</span><br><span class="line">The server&#39;s public key will be saved with the name 1.1.1.1. Please wait...</span><br><span class="line"></span><br><span class="line">Mar 29 2020 12:48:45-08:00 AR2 %%01SSH&#x2F;4&#x2F;SAVE_PUBLICKEY(l)[3]:When deciding whet</span><br><span class="line">her to save the server&#39;s public key 1.1.1.1, the user chose Y. </span><br><span class="line">[AR2]</span><br><span class="line">输入密码，输入密码的时候看不到，输入完毕后，登录AR1成功</span><br><span class="line">Enter password:</span><br><span class="line">路由器的名字已经变为AR1了</span><br><span class="line">&lt;AR1&gt;</span><br></pre></td></tr></table></figure></li>
-<li>两台路由器均为保存配置，若要保存配置，请在用户视图中输入save，下图仅保存AR2路由器<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;AR2&gt;save </span><br><span class="line">  The current configuration will be written to the device. </span><br><span class="line">  Are you sure to continue? (y&#x2F;n)[n]:y</span><br><span class="line">  It will take several minutes to save configuration file, please wait.......</span><br><span class="line">  Configuration file had been saved successfully</span><br><span class="line">  Note: The configuration file will take effect after being activated</span><br><span class="line">&lt;AR2&gt;</span><br><span class="line">查看已保存配置</span><br><span class="line">&lt;AR2&gt;system-view </span><br><span class="line">Enter system view, return user view with Ctrl+Z.</span><br><span class="line">[AR2]dis saved-configuration </span><br><span class="line">&lt;显示信息已省略&gt;</span><br></pre></td></tr></table></figure>
+
+<p>nmcli实用程序可用于由用户和脚本：</p>
+<ul>
+<li>对于服务器，无头机器和终端，nmcli可用于直接控制NetworkManager，而无需GUI。</li>
+<li>对于脚本，nmcli支持用于将输出更改为更适合脚本处理的格式的选项。</li>
+</ul>
+<p>最常见的nmcli命令是nmcli device和nmcli connection：</p>
+<ul>
+<li>nmcli device命令列出了系统中可用的网络设备。</li>
+<li>nmcli connection命令列出了NetworkManager中的可用连接配置文件。</li>
+</ul>
+<p>为了能让<kbd>Tab</kbd>键补全nmcli命令，建议执行以下命令</p>
+<ul>
+<li>安装bash-completion<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum install bash-completion</span><br></pre></td></tr></table></figure></li>
+<li>软件包安装后，nmcli auto-complete下次您登录控制台时将可用。要也在当前控制台中激活它，请输入：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">source &#x2F;etc&#x2F;profile.d&#x2F;bash_completion.sh</span><br></pre></td></tr></table></figure>
 
 
 </li>
-</ol>
+</ul>
+<h1 id="1-网卡命名方案层次结构"><a href="#1-网卡命名方案层次结构" class="headerlink" title="1. 网卡命名方案层次结构"></a>1. 网卡命名方案层次结构</h1><p>如果启用了一致的设备命名（这是CentOS8中的默认设置），则udev设备管理器将根据以下方案生成设备名称：</p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>描述</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>设备名称包含板载设备的固件或BIOS提供的索引号。如果此信息不可用或不适用，请udev使用方案2。</td>
+<td>eno1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>设备名称包含固件或BIOS提供的PCI Express（PCIe）热插拔插槽索引号。如果此信息不可用或不适用，请udev使用方案3。</td>
+<td>ens33</td>
+</tr>
+<tr>
+<td>3</td>
+<td>设备名称包含了硬件连接器的物理位置。如果此信息不可用或不适用，请udev使用方案5。</td>
+<td>enp2s0</td>
+</tr>
+<tr>
+<td>4</td>
+<td>设备名称包含MAC地址。CentOS8默认情况下不使用此方案，但是管理员可以选择使用它。</td>
+<td>enx525400d5e0fb</td>
+</tr>
+<tr>
+<td>5</td>
+<td>传统的不可预测的内核命名方案。如果udev无法应用任何其他方案，则设备管理器将使用此方案。</td>
+<td>eth0</td>
+</tr>
+</tbody></table>
+<h1 id="2-x86-64平台上的可预测网络接口设备名称"><a href="#2-x86-64平台上的可预测网络接口设备名称" class="headerlink" title="2. x86_64平台上的可预测网络接口设备名称"></a>2. x86_64平台上的可预测网络接口设备名称</h1><p>启用一致的网络设备名称功能后，udev设备管理器会根据不同条件创建设备名称。</p>
+<ul>
+<li>根据接口的类型，名称具有两个字符的前缀：<ul>
+<li>en: 用于以太网（Ethernet）</li>
+<li>wl: 用于无线局域网（WLAN）</li>
+<li>ww: 用于无线广域网（WWAN）</li>
+</ul>
+</li>
+<li>第三个字符根据设备类型来选择<ul>
+<li>o&lt;index&gt;<ul>
+<li>主板板载网卡，集成设备索引号，</li>
+</ul>
+</li>
+<li>s&lt;slot&gt;<ul>
+<li>热插拔网卡，usb之类，扩展槽的索引号</li>
+</ul>
+</li>
+<li>x&lt;bus&gt;<ul>
+<li>独立网卡，PCI网卡</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>如ens33，其中en代表以太网，s代表扩展槽索引号，33是由MAC+主板信息得出的唯一的序列</p>
+<h1 id="3-nmcli配置IP联网"><a href="#3-nmcli配置IP联网" class="headerlink" title="3. nmcli配置IP联网"></a>3. nmcli配置IP联网</h1><p>配置ip有多种方法，最常见的就是修改网卡配置文件，位置在/etc/sysconfig/network-scripts/目录中，除了修改配置文件外，CentOS8推荐使用NetworkManager配置网络接口，NetworkManager提供了3种方式修改IP网络</p>
+<ul>
+<li>文本用户界面工具nmtui(安装包NetworkManager-tui)</li>
+<li>命令行工具nmcli（其中nmcli con edit 为交互式）</li>
+<li>图形用户界面工具GNOME GUI</li>
+</ul>
+<h2 id="3-1-NetwokrManager命令行工具-nmcli介绍"><a href="#3-1-NetwokrManager命令行工具-nmcli介绍" class="headerlink" title="3.1 NetwokrManager命令行工具 nmcli介绍"></a>3.1 NetwokrManager命令行工具 nmcli介绍</h2><p>用户和脚本都可使用命令行工具 nmcli 控制 NetworkManager。该命令的基本格式为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli OPTIONS OBJECT &#123; COMMAND | help &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-2-常用参数"><a href="#3-2-常用参数" class="headerlink" title="3.2 常用参数"></a>3.2 常用参数</h2><ul>
+<li>-t,terse<br>此模式可用于计算机脚本处理，因为您可以看到简洁的输出，仅显示值。<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli device </span><br><span class="line">DEVICE      TYPE      STATE      CONNECTION </span><br><span class="line">ens33       ethernet  connected  ens33      </span><br><span class="line">ens37       ethernet  connected  ens37      </span><br><span class="line">virbr0      bridge    connected  virbr0     </span><br><span class="line">lo          loopback  unmanaged  --         </span><br><span class="line">virbr0-nic  tun       unmanaged  --         </span><br><span class="line">[root@localhost ~]# nmcli -t device </span><br><span class="line">ens33:ethernet:connected:ens33</span><br><span class="line">ens37:ethernet:connected:ens37</span><br><span class="line">virbr0:bridge:connected:virbr0</span><br><span class="line">lo:loopback:unmanaged:</span><br><span class="line">virbr0-nic:tun:unmanaged:</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure></li>
+<li>-f, field<br>此选项指定可以在输出中显示哪些字段。例如：NAME、UUID、TYPE、AUTOCONNECT、ACTIVE、DEVICE、STATE。您可以使用一个或多个字段。如果要使用更多，请使用逗号分隔字段，请不要在逗号后使用空格。<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli -f DEVICE,TYPE device</span><br><span class="line">DEVICE      TYPE     </span><br><span class="line">ens33       ethernet </span><br><span class="line">ens37       ethernet </span><br><span class="line">virbr0      bridge   </span><br><span class="line">lo          loopback </span><br><span class="line">virbr0-nic  tun      </span><br><span class="line">[root@localhost ~]# nmcli -t -f DEVICE,TYPE device   </span><br><span class="line">ens33:ethernet</span><br><span class="line">ens37:ethernet</span><br><span class="line">virbr0:bridge</span><br><span class="line">lo:loopback</span><br><span class="line">virbr0-nic:tun</span><br><span class="line">[root@localhost ~]</span><br></pre></td></tr></table></figure></li>
+<li>-p, pretty<br>此选项使nmcli产生人类可读的输出。例如，将值对齐并打印标题。<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli -p device</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">  Status of devices</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">DEVICE      TYPE      STATE      CONNECTION </span><br><span class="line">------------------------------------------------------------------</span><br><span class="line">ens33       ethernet  connected  ens33      </span><br><span class="line">ens37       ethernet  connected  ens37      </span><br><span class="line">virbr0      bridge    connected  virbr0     </span><br><span class="line">lo          loopback  unmanaged  --         </span><br><span class="line">virbr0-nic  tun       unmanaged  --         </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure></li>
+<li>help<ul>
+<li>nmcli help (此命令列出了后续命令中将使用的可用选项和对象名称。)</li>
+<li>nmcli object help 此命令显示与指定对象相关的可用操作的列表。例如，(例如 nmcli c help)</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-4-常用nmcli命令及其缩写"><a href="#3-4-常用nmcli命令及其缩写" class="headerlink" title="3.4 常用nmcli命令及其缩写"></a>3.4 常用nmcli命令及其缩写</h2><table>
+<thead>
+<tr>
+<th>nmcli command</th>
+<th>abbreviation</th>
+<th>说明 (详细内容请参见nmcli-examples（5）手册页)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>nmcli general status</td>
+<td>nmcli g</td>
+<td>检查NetworkManager的整体状态</td>
+</tr>
+<tr>
+<td>nmcli general logging</td>
+<td>nmcli g log</td>
+<td>查看NetworkManager日志记录状态</td>
+</tr>
+<tr>
+<td>nmcli connection show</td>
+<td>nmcli con show / nmcli c</td>
+<td>查看所有连接</td>
+</tr>
+<tr>
+<td>nmcli connection show –active</td>
+<td>nmcli con show -a /nmcli c -a</td>
+<td>仅查看当前活动的连接</td>
+</tr>
+<tr>
+<td>nmcli device status</td>
+<td>nmcli dev /nmcli d</td>
+<td>查看仅由NetworkManager识别的设备及其状态</td>
+</tr>
+<tr>
+<td>nmcli device show</td>
+<td>nmcli dev show / nmcli d show</td>
+<td>列出当前可用的网络连接</td>
+</tr>
+<tr>
+<td>## 3.5 使用nmcli启动和停止网络接口</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>命令</td>
+<td>说明</td>
+<td></td>
+</tr>
+<tr>
+<td>——–</td>
+<td>———</td>
+<td></td>
+</tr>
+<tr>
+<td>nmcli con up id ens37</td>
+<td>启用ens37网络连接</td>
+<td></td>
+</tr>
+<tr>
+<td>nmcli con down id ens37</td>
+<td>停用ens37网络连接</td>
+<td></td>
+</tr>
+<tr>
+<td>nmcli dev connect ens37</td>
+<td>连接ens37网络接口</td>
+<td></td>
+</tr>
+<tr>
+<td>nmcli dev disconnect ens37</td>
+<td>断开ens37网络接口</td>
+<td></td>
+</tr>
+<tr>
+<td>nmcli connection down id  网卡</td>
+<td>在不阻止设备进一步自动激活的情况下取消了与设备的连接。</td>
+<td></td>
+</tr>
+<tr>
+<td>nmcli device disconnect 网卡</td>
+<td>断开设备的连接，并防止该设备自动激活其他连接而无需人工干预。</td>
+<td></td>
+</tr>
+<tr>
+<td><code>注意</code>：该nmcli connection down命令在不阻止设备进一步自动激活的情况下取消了与设备的连接。该nmcli device disconnect命令断开设备的连接，并防止该设备自动激活其他连接而无需人工干预。如果连接的connection.autoconnect标志设置为yes，则连接将在断开连接的设备上再次自动开始。在这种情况下，请使用nmcli device disconnect命令而不是nmcli connection down命令。</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="3-6-nmcli选项"><a href="#3-6-nmcli选项" class="headerlink" title="3.6 nmcli选项"></a>3.6 nmcli选项</h2><ul>
+<li>connection.type<br>连接类型。允许的值包括：adsl，bond，bond-slave，bridge，bridge-slave，bluetooth，cdma，ethernet，gsm，infiniband，olpc-mesh，team，team-slave，vlan，wifi，wimax。每种连接类型都有特定于类型的命令选项。您可以TYPE_SPECIFIC_OPTIONS在nmcli（1）手册页中查看该列表。例如：<ul>
+<li>gsm连接需要在apn中指定的访问点名称。<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c add connection.type gsm apn access_point_name</span><br></pre></td></tr></table></figure></li>
+<li>wifi设备需要在ssid中指定的服务集标识符<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c add connection.type wifi ssid My_identifier</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>connection.interface-name<br>与连接相关的设备名称。<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli con add connection.interface-name ens33 type ethernet</span><br></pre></td></tr></table></figure></li>
+<li>connection.id<br>用于连接配置文件的名称。如果未指定连接名称，则将按以下方式生成一个：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli con add connection.type -connection.interface-name</span><br></pre></td></tr></table></figure>
+connection.id是连接配置文件的名称，不应与表示设备的接口名称（wlp61s0，ens3，em1）混淆。 但是，用户可以使用接口命名连接，但是它们不是同一回事。 <code>一个设备可以有多个连接配置文件</code>。 这对于移动设备或在不同设备之间来回切换网络电缆时特别有用。 无需编辑配置，而是创建不同的配置文件，然后根据需要将其应用到界面。 id选项还引用连接配置文件名称。<br>对于最重要的选项nmcli命令，例如show，up，down分别是：<ul>
+<li>id<br>用户分配给连接配置文件的标识字符串。可以在nmcli连接命令中使用id来识别连接。命令输出中的NAME字段始终表示连接ID。它引用与别名相同的连接配置文件名称。</li>
+<li>uuid<br>系统分配给连接配置文件的唯一标识字符串。的uuid可被用nmcli connection命令来识别连接。</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-7-使用nmcli创建和修改连接配置文件"><a href="#3-7-使用nmcli创建和修改连接配置文件" class="headerlink" title="3.7 使用nmcli创建和修改连接配置文件"></a>3.7 使用nmcli创建和修改连接配置文件</h2><p>连接配置文件包含连接到数据源所需的连接属性信息。</p>
+<ul>
+<li>使用nmcli为NetworkManager 创建新的配置文件：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c add &#123;ARGUMENTS&#125;</span><br></pre></td></tr></table></figure>
+nmcli c add接受两种不同类型的参数：</li>
+<li>属性名称(Property names)<br>NetworkManager用于内部描述连接的名称。最重要的是：<ul>
+<li>connection.type （连接类型）<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c add connection.type bond</span><br></pre></td></tr></table></figure></li>
+<li>connection.interface-name （connection interface name）<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c add connection.interface-name ens37</span><br></pre></td></tr></table></figure></li>
+<li>connection.id （连接ID）<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c add connection.id &quot;My Connection&quot;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>别名(Aliases names)<br>人类可读的名称，这些名称在内部会转换为属性。最常见的是：<ul>
+<li>type (the connection.type property) (类型)<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c add type bond</span><br></pre></td></tr></table></figure></li>
+<li>ifname (the connection.interface-name property)(连接接口名称)<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c add ifname ens37</span><br></pre></td></tr></table></figure></li>
+<li>con-name (the connection.id property) (连接ID)<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c add con-name &quot;My Connection&quot;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>在nmcli的旧版本中，使用别名创建所需的连接。 例如，ifname enp1s0和con-name My_Connection。 可以使用以下格式的命令：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c add type ethernet ifname ens37 con-name &quot;My Connection&quot;</span><br></pre></td></tr></table></figure></li>
+<li>在最新版本中，属性名称和别名可以互换使用。 以下示例均有效且等效：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c add type ethernet ifname ens37 con-name &quot;My Connection&quot; ethernet.mtu 1600</span><br><span class="line">nmcli c add connection.type ethernet ifname ens37 con-name &quot;My Connection&quot; ethernet.mtu 1600 </span><br><span class="line">nmcli c add connection.type ethernet connection.interface-name ens37 connection.id  &quot;My Connection&quot; ethernet.mtu 1600</span><br></pre></td></tr></table></figure></li>
+<li>参数根据连接类型而有所不同。对于所有连接类型，只有type参数是必需的，除bond、team、bridge和 vlan 之外，所有类型都必须使用 ifname。<ul>
+<li>type type_name<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c add type bond</span><br></pre></td></tr></table></figure></li>
+<li>ifname interface_name<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c add ifname interface_name type ethernet</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>要修改连接配置文件的一个或多个属性，请使用以下命令：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c modify</span><br></pre></td></tr></table></figure>
+<ul>
+<li>例如，要将connection.id从“My Connection”更改为“My favorite connection”，并将connection.interface-name更改为enp1s0，请发出以下命令：（最好使用属性名称(property names)。别名(aliases)仅用于兼容性。）<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c modify &quot;My Connection&quot; connection.id &quot;My favorite connection&quot; connection.interface-name enp1s0</span><br></pre></td></tr></table></figure></li>
+<li>此外，要将以太网MTU设置为1600，请如下修改大小：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c modify &quot;My favorite connection&quot; ethernet.mtu 1600</span><br></pre></td></tr></table></figure></li>
+<li>要在使用nmcli修改连接后应用更改，请通过nmcli con up con-name命令再次激活连接：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli con up ens37</span><br><span class="line">Connection successfully activated (D-Bus active path: &#x2F;org&#x2F;freedesktop&#x2F;NetworkManager&#x2F;ActiveConnection&#x2F;6)</span><br></pre></td></tr></table></figure>
+<h2 id="3-8-别名-Alias-和属性名称（Property）"><a href="#3-8-别名-Alias-和属性名称（Property）" class="headerlink" title="3.8 别名(Alias)和属性名称（Property）"></a>3.8 别名(Alias)和属性名称（Property）</h2></li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">别名(Alias)</th>
+<th align="center">例</th>
+<th align="center">属性名称（Property</th>
+<th align="center">例</th>
+<th align="center">定义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">type</td>
+<td align="center">type bond</td>
+<td align="center">connection.type</td>
+<td align="center">connection.type bond</td>
+<td align="center">type of a specific connection. Some of the connection types are: bond, bridge, ethernet, wifi, infiniband, vlan</td>
+</tr>
+<tr>
+<td align="center">ifname</td>
+<td align="center">ifname ens37</td>
+<td align="center">connection.interface-name</td>
+<td align="center">connection.interface-name enp1s0</td>
+<td align="center">name of the device to which a connection belongs to</td>
+</tr>
+<tr>
+<td align="center">con-name</td>
+<td align="center">con-name “My Connection”</td>
+<td align="center">connection.id</td>
+<td align="center">connection.id “My Connection”</td>
+<td align="center">name of a connection</td>
+</tr>
+</tbody></table>
+<h2 id="3-9-使用nmcli为NetworkManager创建新配置文件-的基本格式："><a href="#3-9-使用nmcli为NetworkManager创建新配置文件-的基本格式：" class="headerlink" title="3.9 使用nmcli为NetworkManager创建新配置文件 的基本格式："></a>3.9 使用nmcli为NetworkManager创建新配置文件 的基本格式：</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c add &#123;COMMON_OPTIONS&#125; [IP_OPTIONS]&#x2F;[NETMASK] [GATEWAY]</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>其中{COMMON_OPTIONS}是别名或属性名称</p>
+</li>
+<li><p>其中[IP_OPTIONS]是IP地址：</p>
+<ul>
+<li>对于IPv4地址： ip4</li>
+<li>对于IPv6地址： ip6</li>
+</ul>
+</li>
+<li><p>其中[NETMASK]是网络掩码的宽度。 例如，255.255.255.0是前缀192.168.100.0/24的网络掩码。</p>
+</li>
+<li><p>其中[GATEWAY]是网关信息：</p>
+<ul>
+<li>对于IPv4地址： gw4</li>
+<li>对于IPv6地址： gw6</li>
+</ul>
+</li>
+<li><p>完整信息如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli connection add type ethernet con-name connection-name ifname interface-name ip4 address&#x2F;network mask gw4 address</span><br></pre></td></tr></table></figure></li>
+<li><p>要使用IPv4地址创建连接配置文件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c add type ethernet ifname enp1s0 con-name &quot;My Connection&quot; ip4 192.168.2.100&#x2F;24 gw4 192.168.2.1</span><br></pre></td></tr></table></figure></li>
+<li><p>要激活创建的连接：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c up _&quot;My Connection&quot;</span><br></pre></td></tr></table></figure></li>
+<li><p>要查看创建的连接：(要更紧凑地显示连接，请使用-o选项：)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c show &quot;My Connection&quot;</span><br><span class="line">nmcli -o c show &quot;My Connection&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="3-9-使用nmcli连接到网络"><a href="#3-9-使用nmcli连接到网络" class="headerlink" title="3.9 使用nmcli连接到网络"></a>3.9 使用nmcli连接到网络</h2></li>
+<li><p>列出当前可用的网络连接：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli con show</span><br><span class="line">NAME    UUID                                  TYPE            DEVICE </span><br><span class="line">ens33   8f008d70-827e-4357-a043-e8114cf43b3e  ethernet        ens33  </span><br><span class="line">ens37   fc1bcfed-6d17-4dd6-9a23-49d37217d429  ethernet        ens37  </span><br><span class="line">virbr0  6108b84d-03c0-4aa6-b7e2-f56d26ce45cc  bridge          virbr0</span><br><span class="line">MyWiFi  91451385-4eb8-4080-8b82-720aab8328dd  802-11-wireless wlp61s0</span><br></pre></td></tr></table></figure>
+<p>  <code>注意</code>：输出中的NAME字段始终表示连接ID（connection ID 名称）。 它不是接口名称，即使它看起来一样。 在上面显示的第一个连接中，NAME字段中的ens33是用户给应用于接口ens33的配置文件的连接ID。在显示的最后一个连接中，用户已将连接ID MyWiFi分配给接口wlp61s0。</p>
+</li>
+<li><p>添加以太网连接意味着创建配置文件，然后将其分配给设备。 在创建新的配置文件之前，请按照以下说明检查可用的设备</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli device status</span><br><span class="line">DEVICE      TYPE      STATE      CONNECTION </span><br><span class="line">ens33       ethernet  connected  ens33      </span><br><span class="line">ens37       ethernet  connected  ens37      </span><br><span class="line">virbr0      bridge    connected  virbr0     </span><br><span class="line">lo          loopback  unmanaged  --         </span><br><span class="line">virbr0-nic  tun       unmanaged  --         </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+<h2 id="将设备设置为不受NetworkManager的管理："><a href="#将设备设置为不受NetworkManager的管理：" class="headerlink" title="将设备设置为不受NetworkManager的管理："></a>将设备设置为不受NetworkManager的管理：</h2></li>
+<li><p>语法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli device set &#123;ifname&#125; managed no</span><br></pre></td></tr></table></figure></li>
+<li><p>例如，要将ens37设置为非托管：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli device status</span><br><span class="line">DEVICE      TYPE      STATE      CONNECTION </span><br><span class="line">ens33       ethernet  connected  ens33      </span><br><span class="line">ens37       ethernet  connected  ens37      </span><br><span class="line">virbr0      bridge    connected  virbr0     </span><br><span class="line">lo          loopback  unmanaged  --         </span><br><span class="line">virbr0-nic  tun       unmanaged  --         </span><br><span class="line">[root@localhost ~]# nmcli device set ens37 managed no</span><br><span class="line">[root@localhost ~]# nmcli device status </span><br><span class="line">DEVICE      TYPE      STATE      CONNECTION </span><br><span class="line">ens33       ethernet  connected  ens33      </span><br><span class="line">virbr0      bridge    connected  virbr0     </span><br><span class="line">ens37       ethernet  unmanaged  --         </span><br><span class="line">lo          loopback  unmanaged  --         </span><br><span class="line">virbr0-nic  tun       unmanaged  --</span><br></pre></td></tr></table></figure>
+<ul>
+<li>当您将设备设置为非托管状态时，NetworkManager不会对其进行控制。但是，该设备仍处于连接状态。</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-10-使用nmcli添加和配置动态以太网连接"><a href="#3-10-使用nmcli添加和配置动态以太网连接" class="headerlink" title="3.10 使用nmcli添加和配置动态以太网连接"></a>3.10 使用nmcli添加和配置动态以太网连接</h2><ul>
+<li>添加动态以太网连接<ul>
+<li>要添加具有动态IP配置的以太网配置配置文件，以允许DHCP分配网络配置：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli connection add type ethernet con-name connection-name ifname interface-name</span><br></pre></td></tr></table></figure></li>
+<li>例如，创建一个名为my-office的动态连接配置文件：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]#  nmcli con add type ethernet con-name my-office ifname ens37</span><br><span class="line">Connection &#39;my-office&#39; (03759f12-cb9b-4e59-8bba-acde39a4568b) successfully added.</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure></li>
+<li>要打开以太网连接：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli con up my-office</span><br><span class="line">Connection successfully activated (D-Bus active path: &#x2F;org&#x2F;freedesktop&#x2F;NetworkManager&#x2F;ActiveConnection&#x2F;7)</span><br></pre></td></tr></table></figure></li>
+<li>查看设备和连接的状态：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli device status</span><br><span class="line">DEVICE      TYPE      STATE      CONNECTION </span><br><span class="line">ens33       ethernet  connected  ens33      </span><br><span class="line">ens37       ethernet  connected  my-office  </span><br><span class="line">virbr0      bridge    connected  virbr0     </span><br><span class="line">lo          loopback  unmanaged  --         </span><br><span class="line">virbr0-nic  tun       unmanaged  --         </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>配置动态以太网连接<ul>
+<li>要更改主机发送到DHCP服务器的主机名，请修改dhcp-hostname属性：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli con modify my-office ipv4.dhcp-hostname host-name ipv6.dhcp-hostname host-nane</span><br></pre></td></tr></table></figure></li>
+<li>要更改IPv4主机发送到DHCP服务器的客户端ID ，请修改dhcp-client-id属性：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli con modify my-office my-office ipv4.dhcp-client-id client-ID-string</span><br></pre></td></tr></table></figure></li>
+<li>要忽略DNS服务器发送给主机的DHCP服务器，请修改ignore-auto-dns属性：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli con modify my-office my-office ipv4.ignore-auto-dns yes ipv6.ignore-auto-dns yes</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-11-使用nmcli添加和配置静态以太网连接"><a href="#3-11-使用nmcli添加和配置静态以太网连接" class="headerlink" title="3.11 使用nmcli添加和配置静态以太网连接"></a>3.11 使用nmcli添加和配置静态以太网连接</h2><ul>
+<li>添加静态以太网连接<ul>
+<li>要添加具有静态IPv4配置的以太网连接：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli connection add type ethernet con-name connection-name ifname interface-name ip4 address gw4 address</span><br></pre></td></tr></table></figure>
+IPv6可以使用ip6和gw6选项添加地址和网关信息。</li>
+<li>例如，要创建仅具有IPv4地址和网关的静态以太网连接：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli con add type ethernet con-name test-lab ifname ens37 ip4 10.1.1.1&#x2F;24 gw4 10.1.1.254</span><br></pre></td></tr></table></figure></li>
+<li>（可选）同时指定设备的IPv6地址和网关：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli con add type ethernet con-name test-lab ifname ens37 ip4 10.1.1.10&#x2F;24 gw4  10.1.1.254 ip6 abcd::abcd gw6 2001::1</span><br></pre></td></tr></table></figure></li>
+<li>设置两个IPv4 DNS服务器地址：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli con mod test-lab ipv4.dns &quot;8.8.8.8 8.8.4.4&quot;</span><br></pre></td></tr></table></figure></li>
+<li>请注意，这将替换任何先前设置的DNS服务器。设置两个IPv6 DNS服务器地址：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli con mod test-lab ipv6.dns &quot;2001:4860:4860::8888 2001:4860:4860::8844&quot;</span><br></pre></td></tr></table></figure></li>
+<li>请注意，这将替换任何先前设置的DNS服务器。或者，要将其他DNS服务器添加到任何先前设置的服务器，请使用+前缀：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli con mod test-lab +ipv4.dns &quot;8.8.8.8 8.8.4.4&quot;</span><br><span class="line">nmcli con mod test-lab +ipv6.dns &quot;2001:4860:4860::8888 2001:4860:4860::8844&quot;</span><br></pre></td></tr></table></figure></li>
+<li>要打开新的以太网连接：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli con up test-lab ifname ens37</span><br><span class="line">Connection successfully activated (D-Bus active path: &#x2F;org&#x2F;freedesktop&#x2F;NetworkManager&#x2F;ActiveConnection&#x2F;8)</span><br></pre></td></tr></table></figure></li>
+<li>查看设备和连接的状态：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli device status </span><br><span class="line">DEVICE      TYPE      STATE      CONNECTION </span><br><span class="line">ens33       ethernet  connected  ens33      </span><br><span class="line">ens37       ethernet  connected  test-lab   </span><br><span class="line">virbr0      bridge    connected  virbr0     </span><br><span class="line">lo          loopback  unmanaged  --         </span><br><span class="line">virbr0-nic  tun       unmanaged  --         </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure></li>
+<li>要查看有关新配置的连接的详细信息，请发出以下命令：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli -p con show test-lab</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">                     Connection profile details (test-lab)</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">connection.id:                          test-lab</span><br><span class="line">connection.uuid:                        fd7f6009-1ce1-47c4-bcad-7d83f7bc8d55</span><br><span class="line">connection.stable-id:                   --</span><br><span class="line">connection.type:                        802-3-ethernet</span><br><span class="line">connection.interface-name:              ens37</span><br><span class="line">connection.autoconnect:                 yes</span><br><span class="line">connection.autoconnect-priority:        0</span><br><span class="line">&lt;部分省略&gt;</span><br></pre></td></tr></table></figure>
+使用该-p, –pretty选项会添加标题横幅，并且分节符会出现在输出中。</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-12-使用nmcli将配置文件锁定到特定设备"><a href="#3-12-使用nmcli将配置文件锁定到特定设备" class="headerlink" title="3.12 使用nmcli将配置文件锁定到特定设备"></a>3.12 使用nmcli将配置文件锁定到特定设备</h2><ul>
+<li>要将配置文件锁定到特定的接口设备：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli connection add type ethernet con-name connection-name ifname interface-name</span><br></pre></td></tr></table></figure></li>
+<li>要使配置文件可用于所有兼容的以太网接口：(在配置脚本的时候，不知道网卡名字可以用到)<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli connection add type ethernet con-name connection-name ifname &quot;*&quot;</span><br></pre></td></tr></table></figure></li>
+<li>要将配置文件锁定到特定的MAC地址：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli connection add type ethernet con-name &quot;connection-name&quot; ifname &quot;*&quot; mac 00:0c:29:97:b1:ff</span><br></pre></td></tr></table></figure>
+<ul>
+<li>例子：新建一个网卡配置文件锁定到指定的MAC地址(ens37网卡MAC地址)<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">查看ens37网卡MAC地址</span><br><span class="line">[root@localhost ~]# cat &#x2F;sys&#x2F;class&#x2F;net&#x2F;ens37&#x2F;address </span><br><span class="line">00:0c:29:97:b1:ff</span><br><span class="line">创建配置文件，mac地址绑定</span><br><span class="line">[root@localhost ~]# nmcli con add type ethernet con-name my-office-mac ifname &quot;*&quot; mac 00:0c:29:97:b1:ff</span><br><span class="line">Connection &#39;my-office-mac&#39; (c072a67c-19b0-4fe1-982a-0f4d252747ac) successfully added.</span><br><span class="line">激活文件</span><br><span class="line">[root@localhost ~]# nmcli connection up my-office-mac </span><br><span class="line">Connection successfully activated (D-Bus active path: &#x2F;org&#x2F;freedesktop&#x2F;NetworkManager&#x2F;ActiveConnection&#x2F;11)</span><br><span class="line">查看配置</span><br><span class="line">[root@localhost ~]# nmcli device status               </span><br><span class="line">DEVICE      TYPE      STATE      CONNECTION    </span><br><span class="line">ens33       ethernet  connected  ens33         </span><br><span class="line">ens37       ethernet  connected  my-office-mac </span><br><span class="line">virbr0      bridge    connected  virbr0        </span><br><span class="line">lo          loopback  unmanaged  --            </span><br><span class="line">virbr0-nic  tun       unmanaged  --</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-13-使用nmcli添加Wi-Fi连接"><a href="#3-13-使用nmcli添加Wi-Fi连接" class="headerlink" title="3.13 使用nmcli添加Wi-Fi连接"></a>3.13 使用nmcli添加Wi-Fi连接</h2><ul>
+<li>获取WiFi状态<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli radio wifi</span><br><span class="line">enabled</span><br></pre></td></tr></table></figure>
+  如果wifi是激活状态的会显示enabled</li>
+<li>要查看可用的Wi-Fi接入点：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]#  nmcli dev wifi list</span><br><span class="line">IN-USE  SSID                  MODE   CHAN  RATE        SIGNAL  BARS  SECURITY  </span><br><span class="line">        Hidden                Infra  1     270 Mbit&#x2F;s  92      ▂▄▆█  WPA1 WPA2</span><br></pre></td></tr></table></figure></li>
+<li>刷新AP<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli device wifi rescan</span><br></pre></td></tr></table></figure></li>
+<li>要创建具有静态IP配置但允许自动DNS地址分配的Wi-Fi连接配置文件，请执行以下操作：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli con add con-name MyCafe ifname wls35u1 type wifi ssid Hidden ip4 10.1.1.12&#x2F;28 gw4 10.1.1.1</span><br><span class="line">Connection &#39;MyCafe&#39; (d57f4d30-e6ef-402a-8ea7-94c55c0f6610) successfully added.</span><br></pre></td></tr></table></figure></li>
+<li>要设置WPA2密码，例如“12345678910”：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli con modify MyCafe wifi-sec.key-mgmt wpa-psk</span><br><span class="line">nmcli con modify MyCafe wifi-sec.psk 12345678910</span><br><span class="line">nmcli connection up MyCafe ifname wls35u1</span><br></pre></td></tr></table></figure></li>
+<li>连接有密码的AP<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli device wifi connect &lt;SSID|BSSID&gt; password &lt;password&gt;</span><br></pre></td></tr></table></figure></li>
+<li>要更改Wi-Fi状态：开启/关闭<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli radio wifi [on | off ]</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="3-14-使用nmcli更改特定属性"><a href="#3-14-使用nmcli更改特定属性" class="headerlink" title="3.14 使用nmcli更改特定属性"></a>3.14 使用nmcli更改特定属性</h2><ul>
+<li><p>要检查特定属性，例如mtu：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli connection show id &#39;MyCafe&#39; | grep mtu</span><br><span class="line">802-11-wireless.mtu:                    auto</span><br></pre></td></tr></table></figure></li>
+<li><p>要更改设置的属性：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli connection modify id &#39;MyCafe&#39; 802-11-wireless.mtu 1350</span><br></pre></td></tr></table></figure>
+
+<p>  请注意，NetworkManager将诸如802-3-ethernet和等参数称为802-11-wireless设置，并mtu作为设置的属性。有关nm-settings(5)属性及其设置的更多信息，请参见手册页。</p>
+</li>
+</ul>
 ]]></content>
       <categories>
-        <category>路由与交换机技术</category>
+        <category>Linux</category>
+        <category>CentOS</category>
       </categories>
       <tags>
         <tag>Linux</tag>
-        <tag>R&amp;S</tag>
+        <tag>网路配置</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>nmcli工具介绍</title>
+    <url>/Linux/2020/nmcli%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/</url>
+    <content><![CDATA[<p>nmcli（NetworkManager命令行界面）是用于通过 NetworkManager配置网络的命令行实用程序。nmcli用于创建，显示，编辑，删除，激活和停用网络连接，以及控制和显示网络设备状态。<br>nmcli实用程序可用于由用户和脚本：</p>
+<ul>
+<li>对于服务器，无头机器和终端，nmcli可用于直接控制NetworkManager，而无需GUI。</li>
+<li>对于脚本，nmcli支持用于将输出更改为更适合脚本处理的格式的选项。<a id="more"></a>
+
+</li>
+</ul>
+<h1 id="1-了解nmcli"><a href="#1-了解nmcli" class="headerlink" title="1. 了解nmcli"></a>1. 了解nmcli</h1><p>每个网络设备都对应一个NetworkManager设备。网络设备的配置完全存储在单个NetworkManager连接中。您可以执行将NetworkManager连接应用于NetworkManager设备的网络配置。</p>
+<h2 id="1-1-最常见的nmcli命令是nmcli-device和nmcli-connection："><a href="#1-1-最常见的nmcli命令是nmcli-device和nmcli-connection：" class="headerlink" title="1.1 最常见的nmcli命令是nmcli device和nmcli connection："></a>1.1 最常见的nmcli命令是nmcli device和nmcli connection：</h2><ul>
+<li>nmcli device命令列出了系统中可用的网络设备。</li>
+<li>设备可以是：<ul>
+<li>managed-在NetworkManager控件下。 受管设备可能已连接，表示已激活并配置了该设备，也可能已断开连接，这意味着未配置但已准备好再次激活。</li>
+<li>unmanaged- NetworkManager不控制它。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>nmcli device命令可以接受许多参数。 最值得注意的是：status, show, set, connect, disconnect, modify, delete, wifi。 输入nmcli device help命令以查看完整列表。</li>
+</ul>
+<ul>
+<li>nmcli connection命令列出了NetworkManager中的可用连接配置文件。<ul>
+<li>每个活动的连接在列表顶部显示为绿色。 非活动的连接显示为白色。 DEVICE字段标识在其上应用了连接的设备。</li>
+<li>nmcli connection命令可以采用许多参数来管理连接配置文件。 最值得注意的是：show, up, down, add, modify, delete。 输入nmcli connection help命令以查看完整列表。</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-2-按Tab命令补全"><a href="#1-2-按Tab命令补全" class="headerlink" title="1.2 按Tab命令补全"></a>1.2 按<kbd>Tab</kbd>命令补全</h2><ul>
+<li><p>如果使用nmcli命令，建议键入部分nmcli命令，然后按<kbd>Tab</kbd>键自动完成命令序列。如果可能有多个完成，则<kbd>Tab</kbd>会列出所有它们。这有助于用户更快，更轻松地键入命令。要启用nmcli自动完成功能，请确保安装bash-completion软件包：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum install bash-completion</span><br></pre></td></tr></table></figure></li>
+<li><p>软件包安装后，nmcli auto-complete下次您登录控制台时将可用。要也在当前控制台中激活它，请输入：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">source &#x2F;etc&#x2F;profile.d&#x2F;bash_completion.sh</span><br></pre></td></tr></table></figure>
+<h1 id="2-使用nmcli的基本格式为："><a href="#2-使用nmcli的基本格式为：" class="headerlink" title="2. 使用nmcli的基本格式为："></a>2. 使用nmcli的基本格式为：</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli [OPTIONS] OBJECT &#123; COMMAND | help &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-1-其中-OPTIONS-可以是可选选项，例如："><a href="#2-1-其中-OPTIONS-可以是可选选项，例如：" class="headerlink" title="2.1 其中[OPTIONS]可以是可选选项，例如："></a>2.1 其中[OPTIONS]可以是可选选项，例如：</h2></li>
+<li><p>-t, terse （简洁）</p>
+<ul>
+<li>例：查看简洁的输出<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli -t device </span><br><span class="line">ens33:ethernet:connected:ens33</span><br><span class="line">ens37:ethernet:connected:ens37</span><br><span class="line">virbr0:bridge:connected:virbr0</span><br><span class="line">lo:loopback:unmanaged:</span><br><span class="line">virbr0-nic:tun:unmanaged:</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+  此模式可用于计算机脚本处理，因为您可以看到简洁的输出，仅显示值。</li>
+</ul>
+</li>
+<li><p>-f, field （领域）<br>此选项指定可以在输出中显示哪些字段。 例如，NAME，UUID，TYPE，AUTOCONNECT，ACTIVE，DEVICE，STATE。 您可以使用一个或多个字段。 如果要使用更多，请不要在逗号后使用空格来分隔字段。</p>
+<ul>
+<li>例：在输出中指定字段<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli -f DEVICE,TYPE device </span><br><span class="line">DEVICE      TYPE     </span><br><span class="line">ens33       ethernet </span><br><span class="line">ens37       ethernet </span><br><span class="line">virbr0      bridge   </span><br><span class="line">lo          loopback </span><br><span class="line">virbr0-nic  tun      </span><br><span class="line">[root@localhost ~]#</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# nmcli -t -f DEVICE,TYPE device   </span><br><span class="line">ens33:ethernet</span><br><span class="line">ens37:ethernet</span><br><span class="line">virbr0:bridge</span><br><span class="line">lo:loopback</span><br><span class="line">virbr0-nic:tun</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>-p, pretty<br>此选项使nmcli产生人类可读的输出。 例如，将值对齐并打印标题。</p>
+<ul>
+<li>例：以漂亮的模式查看输出<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> [root@localhost ~]# nmcli -p device</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">  Status of devices</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">DEVICE      TYPE      STATE      CONNECTION </span><br><span class="line">------------------------------------------------------------------</span><br><span class="line">ens33       ethernet  connected  ens33      </span><br><span class="line">ens37       ethernet  connected  ens37      </span><br><span class="line">virbr0      bridge    connected  virbr0     </span><br><span class="line">lo          loopback  unmanaged  --         </span><br><span class="line">virbr0-nic  tun       unmanaged  --         </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>-h, help<br>打印帮助信息。</p>
+</li>
+</ul>
+<h2 id="2-2-其中“OBJECT”可以是以下选项之一：general-常规-，networking-网络-，radio-无线电-，connection-连接-，device-设备-，agent-代理-和monitor-监视器-。"><a href="#2-2-其中“OBJECT”可以是以下选项之一：general-常规-，networking-网络-，radio-无线电-，connection-连接-，device-设备-，agent-代理-和monitor-监视器-。" class="headerlink" title="2.2 其中“OBJECT”可以是以下选项之一：general(常规)，networking(网络)，radio(无线电)，connection(连接)，device(设备)，agent(代理)和monitor(监视器)。"></a>2.2 其中“OBJECT”可以是以下选项之一：general(常规)，networking(网络)，radio(无线电)，connection(连接)，device(设备)，agent(代理)和monitor(监视器)。</h2><h2 id="2-3-其中，COMMAND是必需的nmcli命令。"><a href="#2-3-其中，COMMAND是必需的nmcli命令。" class="headerlink" title="2.3 其中，COMMAND是必需的nmcli命令。"></a>2.3 其中，COMMAND是必需的nmcli命令。</h2><h2 id="2-4-其中的help是列出与指定对象相关的可用操作："><a href="#2-4-其中的help是列出与指定对象相关的可用操作：" class="headerlink" title="2.4 其中的help是列出与指定对象相关的可用操作："></a>2.4 其中的help是列出与指定对象相关的可用操作：</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli OBJECT help</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c help</span><br></pre></td></tr></table></figure>
+<h1 id="3-nmcli属性名称和别名概述"><a href="#3-nmcli属性名称和别名概述" class="headerlink" title="3. nmcli属性名称和别名概述"></a>3. nmcli属性名称和别名概述</h1><h2 id="3-1-先决条件"><a href="#3-1-先决条件" class="headerlink" title="3.1 先决条件"></a>3.1 先决条件</h2><p>Property names(属性名称)是NetworkManager用来标识通用选项的特定名称。 以下是一些重要的nmcli属性名称：</p>
+<ul>
+<li>connection.type (连接类型)<br>特定连接的类型。 允许的值包括：adsl，bond，bond-slave，bridge，bridge-slave，bluetooth，cdma，ethernet，gsm，infiniband，olpc-mesh，team，team-slave，vlan，wifi，wimax。 每种连接类型都有特定于类型的命令选项。 您可以在nmcli（1）手册页中看到TYPE_SPECIFIC_OPTIONS列表。 例如，gsm连接需要在apn中指定的访问点名称。 wifi设备需要在ssid中指定的服务集标识符。</li>
+<li>connection.interface-name(连接接口名称)<br>与连接相关的设备名称。 例如，enp1s0。</li>
+<li>connection.id(连接ID)<br>用于连接配置文件的名称。 如: my-connection<br><font color=red>说明</font>：connection.id是连接配置文件的名称，不应与表示设备的接口名称（wlan0，ens37，em1）混淆。 但是，用户可以使用接口命名连接，但是它们不是同一回事。 <font color=blue>一个设备可以有多个连接配置文件</font>。 这对于移动设备或在不同设备之间来回切换网络电缆时特别有用。 无需编辑配置，而是创建不同的配置文件，然后根据需要将其应用到界面。 id选项还引用连接配置文件名称。</li>
+</ul>
+<h2 id="3-2-nmcli命令最重要的选项（例如show，up，down）是："><a href="#3-2-nmcli命令最重要的选项（例如show，up，down）是：" class="headerlink" title="3.2 nmcli命令最重要的选项（例如show，up，down）是："></a>3.2 nmcli命令最重要的选项（例如show，up，down）是：</h2><ul>
+<li>id<br>用户分配给连接配置文件的标识字符串。 可以在nmcli连接命令中使用id来识别连接。 命令输出中的NAME字段始终表示连接ID。 它引用与别名相同的连接配置文件名称。</li>
+<li>uuid<br>系统分配给连接配置文件的唯一标识字符串。 可在nmcli连接命令中使用uuid来标识连接。</li>
+</ul>
+<h2 id="3-3-Aliases-别名-和property-names-属性名称"><a href="#3-3-Aliases-别名-和property-names-属性名称" class="headerlink" title="3.3 Aliases(别名)和property names(属性名称)"></a>3.3 Aliases(别名)和property names(属性名称)</h2><p>别名是属性名称的替代名称-别名在nmcli内部转换为属性。 别名更具可读性，但属性名称更可取。两者可以互换使用。</p>
+<table>
+<thead>
+<tr>
+<th align="center">Alias（别名）</th>
+<th align="center">Example(示例)</th>
+<th align="center">Property(属性)</th>
+<th align="center">Example(示例)</th>
+<th align="center">Definition(定义)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">type</td>
+<td align="center">type bond</td>
+<td align="center">connection.type</td>
+<td align="center">connection.type bond</td>
+<td align="center">type of a specific connection. Some of the connection types are: bond, bridge, ethernet, wifi, infiniband, vlan</td>
+</tr>
+<tr>
+<td align="center">ifname</td>
+<td align="center">ifname ens37</td>
+<td align="center">connection.interface-name</td>
+<td align="center">connection.interface-name enp1s0</td>
+<td align="center">name of the device to which a connection belongs to</td>
+</tr>
+<tr>
+<td align="center">con-name</td>
+<td align="center">con-name “My Connection”</td>
+<td align="center">connection.id</td>
+<td align="center">connection.id “My Connection”</td>
+<td align="center">name of a connection</td>
+</tr>
+</tbody></table>
+<h1 id="4-常用命令"><a href="#4-常用命令" class="headerlink" title="4. 常用命令"></a>4. 常用命令</h1><h2 id="4-1-查看所有连接"><a href="#4-1-查看所有连接" class="headerlink" title="4.1 查看所有连接"></a>4.1 查看所有连接</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli connection show</span><br><span class="line">NAME    UUID                                  TYPE      DEVICE </span><br><span class="line">ens33   8f008d70-827e-4357-a043-e8114cf43b3e  ethernet  ens33  </span><br><span class="line">ens37   fc1bcfed-6d17-4dd6-9a23-49d37217d429  ethernet  ens37  </span><br><span class="line">virbr0  3e31fc6c-da94-4359-8999-30132db8dfad  bridge    virbr0 </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+<h2 id="4-2-仅查看当前活动的连接"><a href="#4-2-仅查看当前活动的连接" class="headerlink" title="4.2 仅查看当前活动的连接"></a>4.2 仅查看当前活动的连接</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli connection show</span><br><span class="line">NAME    UUID                                  TYPE      DEVICE </span><br><span class="line">ens33   8f008d70-827e-4357-a043-e8114cf43b3e  ethernet  ens33  </span><br><span class="line">ens37   fc1bcfed-6d17-4dd6-9a23-49d37217d429  ethernet  ens37  </span><br><span class="line">virbr0  3e31fc6c-da94-4359-8999-30132db8dfad  bridge    virbr0</span><br></pre></td></tr></table></figure>
+<h2 id="4-3-停用连接"><a href="#4-3-停用连接" class="headerlink" title="4.3 停用连接"></a>4.3 停用连接</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli connection down id ens37</span><br><span class="line">Connection &#39;ens37&#39; successfully deactivated (D-Bus active path: &#x2F;org&#x2F;freedesktop&#x2F;NetworkManager&#x2F;ActiveConnection&#x2F;2)</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli connection show</span><br><span class="line">NAME    UUID                                  TYPE      DEVICE </span><br><span class="line">ens33   8f008d70-827e-4357-a043-e8114cf43b3e  ethernet  ens33  </span><br><span class="line">virbr0  3e31fc6c-da94-4359-8999-30132db8dfad  bridge    virbr0 </span><br><span class="line">ens37   fc1bcfed-6d17-4dd6-9a23-49d37217d429  ethernet  --</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-4-激活连接"><a href="#4-4-激活连接" class="headerlink" title="4.4 激活连接"></a>4.4 激活连接</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli connection up id ens37</span><br><span class="line">Connection successfully activated (D-Bus active path: &#x2F;org&#x2F;freedesktop&#x2F;NetworkManager&#x2F;ActiveConnection&#x2F;5)</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli connection show       </span><br><span class="line">NAME    UUID                                  TYPE      DEVICE </span><br><span class="line">ens33   8f008d70-827e-4357-a043-e8114cf43b3e  ethernet  ens33  </span><br><span class="line">ens37   fc1bcfed-6d17-4dd6-9a23-49d37217d429  ethernet  ens37  </span><br><span class="line">virbr0  3e31fc6c-da94-4359-8999-30132db8dfad  bridge    virbr0 </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-5-断开设备连接以防止其再次自动启动"><a href="#4-5-断开设备连接以防止其再次自动启动" class="headerlink" title="4.5 断开设备连接以防止其再次自动启动"></a>4.5 断开设备连接以防止其再次自动启动</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli device disconnect ens37 </span><br><span class="line">Device &#39;ens37&#39; successfully disconnected.</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli connection show</span><br><span class="line">NAME    UUID                                  TYPE      DEVICE </span><br><span class="line">ens33   8f008d70-827e-4357-a043-e8114cf43b3e  ethernet  ens33  </span><br><span class="line">virbr0  3e31fc6c-da94-4359-8999-30132db8dfad  bridge    virbr0 </span><br><span class="line">ens37   fc1bcfed-6d17-4dd6-9a23-49d37217d429  ethernet  --     </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+<p><font color=red>说明</font>若要启动连接，请使用4.4中的激活即可,nmcli connection down命令可在不阻止设备进一步自动激活的情况下停用与设备的连接。 nmcli device disconnect命令可断开设备连接，并防止该设备自动激活其他连接，而无需人工干预。 如果连接的connection.autoconnect标志设置为yes，若防止断开连接的设备上再次自动启动。 在这种情况下，请使用nmcli device connect命令而不是nmcli connection down命令。</p>
+<h2 id="4-6-查看仅由NetworkManager识别的设备及其状态"><a href="#4-6-查看仅由NetworkManager识别的设备及其状态" class="headerlink" title="4.6 查看仅由NetworkManager识别的设备及其状态"></a>4.6 查看仅由NetworkManager识别的设备及其状态</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli device status </span><br><span class="line">DEVICE      TYPE      STATE         CONNECTION </span><br><span class="line">ens33       ethernet  connected     ens33      </span><br><span class="line">virbr0      bridge    connected     virbr0     </span><br><span class="line">ens37       ethernet  disconnected  --         </span><br><span class="line">lo          loopback  unmanaged     --         </span><br><span class="line">virbr0-nic  tun       unmanaged     --</span><br></pre></td></tr></table></figure>
+<h2 id="4-7-查看设备的常规信息"><a href="#4-7-查看设备的常规信息" class="headerlink" title="4.7 查看设备的常规信息"></a>4.7 查看设备的常规信息</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli device show</span><br><span class="line">GENERAL.DEVICE:                         ens33</span><br><span class="line">GENERAL.TYPE:                           ethernet</span><br><span class="line">GENERAL.HWADDR:                         00:0C:29:97:B1:F5</span><br><span class="line">GENERAL.MTU:                            1500</span><br><span class="line">GENERAL.STATE:                          100 (connected)</span><br><span class="line">GENERAL.CONNECTION:                     ens33</span><br><span class="line">GENERAL.CON-PATH:                       &#x2F;org&#x2F;freedesktop&#x2F;NetworkManager&#x2F;ActiveC&gt;</span><br><span class="line">WIRED-PROPERTIES.CARRIER:               on</span><br><span class="line">IP4.ADDRESS[1]:                         192.168.60.128&#x2F;24</span><br><span class="line">&lt;部分省略&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="4-8-检查NetworkManager的整体状态"><a href="#4-8-检查NetworkManager的整体状态" class="headerlink" title="4.8 检查NetworkManager的整体状态"></a>4.8 检查NetworkManager的整体状态</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli general status </span><br><span class="line">STATE      CONNECTIVITY  WIFI-HW  WIFI     WWAN-HW  WWAN    </span><br><span class="line">connected  full          enabled  enabled  enabled  enabled </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在简洁模式下：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli -t -f STATE general</span><br><span class="line">connected</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="4-9-查看NetworkManager日志记录状态"><a href="#4-9-查看NetworkManager日志记录状态" class="headerlink" title="4.9 查看NetworkManager日志记录状态"></a>4.9 查看NetworkManager日志记录状态</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli general logging</span><br><span class="line">LEVEL  DOMAINS                                                                                             </span><br><span class="line"></span><br><span class="line">INFO   PLATFORM,RFKILL,ETHER,WIFI,BT,MB,DHCP4,DHCP6,PPP,IP4,IP6,AUTOIP4,DNS,VPN,SHARING,SUPPLICANT,AGENTS,SETTINGS,SUSPEND,CORE,DEVICE,OLPC,INFINIBAND,FIREWALL,ADSL,BOND,VLAN,BRIDGE,TEAM,CONCHECK,DCB,DISPATCH,AUDIT,SYSTEMD,PROXY </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+<h1 id="5-一些nmcli命令的缩写"><a href="#5-一些nmcli命令的缩写" class="headerlink" title="5. 一些nmcli命令的缩写"></a>5. 一些nmcli命令的缩写</h1><table>
+<thead>
+<tr>
+<th align="center">命令(nmcli command)</th>
+<th align="center">缩写(abbreviation)</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">nmcli general status</td>
+<td align="center">nmcli g</td>
+<td align="center">检查NetworkManager的整体状态</td>
+</tr>
+<tr>
+<td align="center">nmcli general logging</td>
+<td align="center">nmcli g log</td>
+<td align="center">查看NetworkManager日志记录状态</td>
+</tr>
+<tr>
+<td align="center">nmcli connection show</td>
+<td align="center">nmcli con show or nmcli c</td>
+<td align="center">查看所有连接</td>
+</tr>
+<tr>
+<td align="center">nmcli connection show –active</td>
+<td align="center">nmcli con show -a or nmcli c -a</td>
+<td align="center">仅查看当前活动的连接</td>
+</tr>
+<tr>
+<td align="center">nmcli device status</td>
+<td align="center">nmcli dev or nmcli d</td>
+<td align="center">查看仅由NetworkManager识别的设备及其状态</td>
+</tr>
+<tr>
+<td align="center">nmcli device show</td>
+<td align="center">nmcli dev show or nmcli d show</td>
+<td align="center">查看设备的常规信息</td>
+</tr>
+</tbody></table>
+<h1 id="6-使用nmcli设置受管或不受管的设备"><a href="#6-使用nmcli设置受管或不受管的设备" class="headerlink" title="6. 使用nmcli设置受管或不受管的设备"></a>6. 使用nmcli设置受管或不受管的设备</h1><h2 id="6-1-列出当前可用的网络连接："><a href="#6-1-列出当前可用的网络连接：" class="headerlink" title="6.1 列出当前可用的网络连接："></a>6.1 列出当前可用的网络连接：</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli con show</span><br><span class="line">NAME     UUID                                  TYPE      DEVICE  </span><br><span class="line">ens33    8f008d70-827e-4357-a043-e8114cf43b3e  ethernet  ens33   </span><br><span class="line">ens37    fc1bcfed-6d17-4dd6-9a23-49d37217d429  ethernet  ens37   </span><br><span class="line">My-WiFi  8ce4176e-4808-4ab7-8b49-20e333e0b58d  wifi      wls35u1 </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+<p><font color=red>注意</font>: 输出中的NAME字段始终表示连接ID（名称）。 它不是接口名称，即使它看起来一样。 在上面显示的第二个连接中，NAME字段中的ens37是用户给应用于接口ens37的配置文件的连接ID。 在显示的最后一个连接中，用户已将连接ID My-WiFi分配给接口wls35u1。</p>
+<h2 id="6-2-检查可用设备"><a href="#6-2-检查可用设备" class="headerlink" title="6.2 检查可用设备"></a>6.2 检查可用设备</h2><ul>
+<li>添加以太网连接意味着创建配置文件，然后将其分配给设备。 在创建新的配置文件之前，请按照以下说明检查可用的设备：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli device status</span><br><span class="line">DEVICE      TYPE      STATE      CONNECTION </span><br><span class="line">ens33       ethernet  connected  ens33      </span><br><span class="line">ens37       ethernet  connected  ens37      </span><br><span class="line">wls35u1     wifi      connected  My-WiFi    </span><br><span class="line">virbr0      bridge    connected  virbr0     </span><br><span class="line">lo          loopback  unmanaged  --         </span><br><span class="line">virbr0-nic  tun       unmanaged  --         </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure></li>
+<li>设置不受 NetworkManager管理的设备：<br>格式<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli device set ifname managed no</span><br></pre></td></tr></table></figure>
+例：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli device set ens37 managed no</span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# nmcli device status</span><br><span class="line">DEVICE      TYPE      STATE      CONNECTION </span><br><span class="line">ens33       ethernet  connected  ens33      </span><br><span class="line">wls35u1     wifi      connected  My-WiFi    </span><br><span class="line">virbr0      bridge    connected  virbr0     </span><br><span class="line">ens37       ethernet  unmanaged  --         </span><br><span class="line">lo          loopback  unmanaged  --         </span><br><span class="line">virbr0-nic  tun       unmanaged  --         </span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+<font color=red>注意</font>:当您将设备设置为非管理状态时，NetworkManager不会对其进行控制。 如果要配置的设备被列为unmanaged设备，则nmcli命令对此设备没有任何影响。 但是，该设备仍处于连接状态。</li>
+</ul>
+<h1 id="7-使用nmcli创建连接配置文件"><a href="#7-使用nmcli创建连接配置文件" class="headerlink" title="7. 使用nmcli创建连接配置文件"></a>7. 使用nmcli创建连接配置文件</h1><p>您可以创建要与设备关联的连接配置文件。</p>
+<h2 id="7-1-使用nmcli为NetworkManager创建新配置文件的基本格式："><a href="#7-1-使用nmcli为NetworkManager创建新配置文件的基本格式：" class="headerlink" title="7.1 使用nmcli为NetworkManager创建新配置文件的基本格式："></a>7.1 使用nmcli为NetworkManager创建新配置文件的基本格式：</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c add &#123;COMMON_OPTIONS&#125; [IP_OPTIONS]&#x2F;[NETMASK] [GATEWAY]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>其中{COMMON_OPTIONS}是别名或属性名称</li>
+<li>其中[IP_OPTIONS]是IP地址：<ul>
+<li>对于IPv4地址：ip4</li>
+<li>对于IPv6地址：ip6</li>
+</ul>
+</li>
+<li>其中[NETMASK]是网络掩码的宽度。 例如，255.255.255.0是前缀192.168.100.0/24的网络掩码。</li>
+<li>其中[GATEWAY]是网关信息：<ul>
+<li>对于IPv4地址：gw4</li>
+<li>对于IPv6地址：gw6</li>
+</ul>
+</li>
+</ul>
+<h2 id="7-2-语法格式示例"><a href="#7-2-语法格式示例" class="headerlink" title="7.2 语法格式示例"></a>7.2 语法格式示例</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli connection add type ethernet con-name connection-name ifname interface-name ip4 address&#x2F;network mask gw4 address</span><br></pre></td></tr></table></figure>
+<ul>
+<li>要使用IPv4地址创建连接配置文件：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli c add type ethernet ifname ens37 con-name &quot;My Connection&quot; ip4 192.168.1.100&#x2F;24 gw4 192.168.1.254</span><br><span class="line">Connection &#39;My Connection&#39; (8a63d3d0-4c60-49c6-b24b-0a28be91ab35) successfully added.</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure></li>
+<li>要激活创建的连接：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli c up &quot;My Connection&quot; </span><br><span class="line">Connection successfully activated (D-Bus active path: &#x2F;org&#x2F;freedesktop&#x2F;NetworkManager&#x2F;ActiveConnection&#x2F;12)</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure></li>
+<li>要查看创建的连接：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# nmcli c show &quot;My Connection&quot; </span><br><span class="line">connection.id:                          My Connection</span><br><span class="line">connection.uuid:                        8a63d3d0-4c60-49c6-b24b-0a28be91ab35</span><br><span class="line">connection.stable-id:                   --</span><br><span class="line">connection.type:                        802-3-ethernet</span><br><span class="line">connection.interface-name:              ens37</span><br><span class="line">connection.autoconnect:                 yes</span><br><span class="line">&lt;部分省略&gt;</span><br></pre></td></tr></table></figure></li>
+<li>加入-o参数，则显示更紧凑<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli  -o c show &quot;My Connection&quot; </span><br><span class="line">connection.id:                          My Connection</span><br><span class="line">connection.uuid:                        8a63d3d0-4c60-49c6-b24b-0a28be91ab35</span><br><span class="line">connection.type:                        802-3-ethernet</span><br><span class="line">connection.interface-name:              ens37</span><br><span class="line">connection.timestamp:                   1586968719</span><br><span class="line">ipv4.method:                            manual</span><br><span class="line">ipv4.addresses:                         192.168.1.100&#x2F;24</span><br><span class="line">ipv4.gateway:                           192.168.1.254</span><br></pre></td></tr></table></figure>
+<h1 id="8-使用nmcli修改连接配置文件"><a href="#8-使用nmcli修改连接配置文件" class="headerlink" title="8. 使用nmcli修改连接配置文件"></a>8. 使用nmcli修改连接配置文件</h1>您可以修改连接配置文件的现有配置。</li>
+<li>要修改连接配置文件的一个或多个属性，请使用以下命令：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmcli c modify XXX</span><br></pre></td></tr></table></figure></li>
+<li>例如，要将connection.id从“My Connection”更改为“My favorite connection”，并将connection.interface-name更改为ens37：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli c modify &quot;My Connection&quot; connection.id &quot;My favorite connection&quot; connection.interface-name ens37</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure></li>
+<li>要在使用nmcli修改连接后应用更改，请输入以下命令再次激活连接：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nmcli con up &quot;My favorite connection&quot;</span><br><span class="line">Connection successfully activated (D-Bus active path: &#x2F;org&#x2F;freedesktop&#x2F;NetworkManager&#x2F;ActiveConnection&#x2F;13)</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>CentOS</tag>
+        <tag>nmcli</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>修改console密码</title>
+    <url>/R-S/2020/%E9%80%9A%E8%BF%87HTTP%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE%E8%AE%BE%E5%A4%87/</url>
+    <content><![CDATA[<p>所有厂商的交换机都会有一个console接口，用于调试，若不设置密码，嘿嘿。我总结了一下华为交换机配置console密码，非常简单</p>
+<a id="more"></a>
+
+<h1 id="1-创建密码"><a href="#1-创建密码" class="headerlink" title="1. 创建密码"></a>1. 创建密码</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[Server]user-interface console 0</span><br><span class="line">[Server-ui-console0]authentication-mode password </span><br><span class="line">Please configure the login password (maximum length 16):12345678</span><br></pre></td></tr></table></figure>
+<h1 id="2-修改密码"><a href="#2-修改密码" class="headerlink" title="2. 修改密码"></a>2. 修改密码</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[Server]user-interface console 0</span><br><span class="line">[Server-ui-console0]set authentication password cipher 123456789</span><br><span class="line">[Server-ui-console0]</span><br></pre></td></tr></table></figure>
+<h1 id="3-删除密码"><a href="#3-删除密码" class="headerlink" title="3. 删除密码"></a>3. 删除密码</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[Server-ui-console0]undo authentication-mode</span><br></pre></td></tr></table></figure>
+
+<h1 id="4-通过console登录就会提示有密码"><a href="#4-通过console登录就会提示有密码" class="headerlink" title="4. 通过console登录就会提示有密码"></a>4. 通过console登录就会提示有密码</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">  Configuration console exit, please press any key to log on</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Login authentication</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Password:</span><br></pre></td></tr></table></figure>
+
+<h1 id="5-在BootROM下清除Console口密码"><a href="#5-在BootROM下清除Console口密码" class="headerlink" title="5.在BootROM下清除Console口密码"></a>5.在BootROM下清除Console口密码</h1><ul>
+<li>设备的BootROM提供了清除Console口密码的功能，可以在用户使用Console口登录的时候跳过密码检查。这样系统启动后除了不需要输入Console密码外，与正常启动相同，也会完成所有配置加载。设备启动后重新配置验证方式和Console口密码，然后保存配置</li>
+<li>要进入到BootROM菜单需要重启设备，会导致业务中断，请视具体情况做好设备备份，并尽量选择业务量较少的时间操作。</li>
+<li>清除Console口密码登录后请马上配置新的密码。</li>
+<li>在此操作过程中不要对设备进行下电。</li>
+<li>用串口线连接设备，然后重启。当出现“Press Ctrl+B to enter BootROM menu…”（V200R002及V200R003版本）或者“Press Ctrl+B or Ctrl+E to enter BootROM menu …”（V200R005及以后发布的版本）打印信息时，按下“Ctrl+B”或者“Ctrl+E”并键入密码（缺省为“<a href="mailto:Admin@huawei.com">Admin@huawei.com</a>”，V100R006C03之前版本可能为“huawei”），进入BootROM主菜单。</li>
+<li>清除Console口登录密码。<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">BootROM MENU</span><br><span class="line"></span><br><span class="line">1. Boot with default mode</span><br><span class="line">2. Enter serial submenu</span><br><span class="line">3. Enter startup submenu</span><br><span class="line">4. Enter ethernet submenu</span><br><span class="line">5. Enter filesystem submenu</span><br><span class="line">6. Modify BootROM password &#x2F;&#x2F;V200R006及之前版本：Modify BootROM password V200R007及之后版本：Enter password submenu</span><br><span class="line">7. Clear password for console user</span><br><span class="line">8. Reboot</span><br><span class="line">(Press Ctrl+E to enter diag menu)</span><br><span class="line">Enter your choice(1-8): 7</span><br><span class="line">Note: Clear password for console user? Yes or No(Y&#x2F;N): y</span><br><span class="line">Clear password for console user successfully. Choose &quot;1&quot; to boot, then set a new password.</span><br><span class="line">Note: Do not choose &quot;8. Reboot&quot; or power off the device, otherwise this operation will not take effect.</span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
+      <categories>
+        <category>R&amp;S</category>
+      </categories>
+      <tags>
+        <tag>交换机/路由器</tag>
+        <tag>登录</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>通过Telnet远程访问交换机</title>
+    <url>/R-S/2020/%E9%80%9A%E8%BF%87Telnet%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE%E8%AE%BE%E5%A4%87/</url>
+    <content><![CDATA[<p>Telnet提供了一种通过终端远程登录到服务器的方式，用户可以先登录到一台主机，然后再通过Telnet的方式远程登录到网络上的其他主机，而不需要为每一台主机都连接一个PC</p>
+<a id="more"></a>
+
+<h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1. 简介"></a>1. 简介</h1><p>Telnet：远程通信网络协议Telecommunication Network Protocol）的简称，是一种传输控制协议（TCP,Transmission Control Protocol）连接，用来传输数据和少量的Telnet控制信息。Telnet采用C/S模式（客户端/服务器）</p>
+<h1 id="2-网络拓扑"><a href="#2-网络拓扑" class="headerlink" title="2. 网络拓扑"></a>2. 网络拓扑</h1><p><img data-src="/img/R-S/%E9%80%9A%E8%BF%87Telnet%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE%E8%AE%BE%E5%A4%87/2-01.png" alt=""></p>
+<h1 id="3-前期准备"><a href="#3-前期准备" class="headerlink" title="3. 前期准备"></a>3. 前期准备</h1><h2 id="Client配置"><a href="#Client配置" class="headerlink" title="Client配置"></a>Client配置</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-- 进入系统视图模式</span><br><span class="line">&lt;Huawei&gt;sys</span><br><span class="line">Enter system view, return user view with Ctrl+Z.</span><br><span class="line"></span><br><span class="line">-- 设置设备的名称为Client</span><br><span class="line">[Huawei]sysname Client</span><br><span class="line">[Client]</span><br><span class="line"></span><br><span class="line">--进入g0&#x2F;0&#x2F;0接口，并配置ip地址</span><br><span class="line">[Client]inter g0&#x2F;0&#x2F;0</span><br><span class="line">[Client-GigabitEthernet0&#x2F;0&#x2F;0]ip add 192.168.1.100 24</span><br><span class="line">[Client-GigabitEthernet0&#x2F;0&#x2F;0]quit</span><br><span class="line">[Client]</span><br><span class="line">[Client]quit</span><br><span class="line"></span><br><span class="line">-- 保存配置</span><br><span class="line">&lt;Client&gt;save</span><br><span class="line">  The current configuration will be written to the device. </span><br><span class="line">  Are you sure to continue? (y&#x2F;n)[n]:y</span><br><span class="line">  It will take several minutes to save configuration file, please wait.......</span><br><span class="line">  Configuration file had been saved successfully</span><br><span class="line">  Note: The configuration file will take effect after being activated</span><br><span class="line">&lt;Client&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="Server配置"><a href="#Server配置" class="headerlink" title="Server配置"></a>Server配置</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;Huawei&gt;system-view </span><br><span class="line">Enter system view, return user view with Ctrl+Z.</span><br><span class="line"></span><br><span class="line">-- 设置设备名称为Server</span><br><span class="line">[Huawei]sysname Server</span><br><span class="line">[Server]</span><br><span class="line"></span><br><span class="line">-- 进入g0&#x2F;0&#x2F;0接口，并配置ip地址</span><br><span class="line">[Server]interface g0&#x2F;0&#x2F;0</span><br><span class="line">[Server-GigabitEthernet0&#x2F;0&#x2F;0]ip add 192.168.1.254 24</span><br><span class="line">[Server-GigabitEthernet0&#x2F;0&#x2F;0]quit</span><br><span class="line">[Server]</span><br></pre></td></tr></table></figure>
+<h2 id="开启-关闭Telnet"><a href="#开启-关闭Telnet" class="headerlink" title="开启/关闭Telnet"></a>开启/关闭Telnet</h2><p><strong>关闭telnet</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[Server]undo telnet server enable</span><br></pre></td></tr></table></figure>
+<p><strong>开启telnet</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[Server]telnet server enable</span><br></pre></td></tr></table></figure>
+<h1 id="4-通过密码直接访问路由器"><a href="#4-通过密码直接访问路由器" class="headerlink" title="4. 通过密码直接访问路由器"></a>4. 通过密码直接访问路由器</h1><h2 id="Server配置-1"><a href="#Server配置-1" class="headerlink" title="Server配置"></a>Server配置</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;Huawei&gt;sys</span><br><span class="line">[Server]</span><br><span class="line"></span><br><span class="line">-- 进入虚拟终端</span><br><span class="line">[Server]user-interface vty 0 4</span><br><span class="line"></span><br><span class="line">-- 配置telnet验证方式为密码认证 ，密码为12345678</span><br><span class="line">[Server-ui-vty0-4]authentication-mode password </span><br><span class="line">Please configure the login password (maximum length 16):12345678</span><br><span class="line"></span><br><span class="line">-- 配置telnet登录等级，最小为0，最高为15级</span><br><span class="line">[Server-ui-vty0-4]user privilege level 15</span><br><span class="line"></span><br><span class="line">-- 密码本地显示加密，或更改登录密码</span><br><span class="line">[Server-ui-vty0-4]set authentication password cipher 12345678</span><br><span class="line">[Server-ui-vty0-4]quit</span><br><span class="line"></span><br><span class="line">--保存配置</span><br><span class="line">[Server]quit</span><br><span class="line">&lt;Server&gt;save</span><br><span class="line">  The current configuration will be written to the device. </span><br><span class="line">  Are you sure to continue? (y&#x2F;n)[n]:y</span><br><span class="line">  It will take several minutes to save configuration file, please wait.......</span><br><span class="line">  Configuration file had been saved successfully</span><br><span class="line">  Note: The configuration file will take effect after being activated</span><br><span class="line">&lt;Server&gt;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="登录测试"><a href="#登录测试" class="headerlink" title="登录测试"></a>登录测试</h2><p>在Client端通过telnet远程登录到server路由器</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;Client&gt;</span><br><span class="line">&lt;Client&gt;telnet 192.168.1.254</span><br><span class="line">  Press CTRL_] to quit telnet mode</span><br><span class="line">  Trying 192.168.1.254 ...</span><br><span class="line">  Connected to 192.168.1.254 ...</span><br><span class="line"></span><br><span class="line">Login authentication</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Password:(在此处输入telnet密码即可，我配置的是12345678，数据密码无回显提示)</span><br><span class="line">&lt;Server&gt; (设备名称已经显示为server，代表登录成功)</span><br><span class="line">&lt;Server&gt;quit</span><br><span class="line"></span><br><span class="line">  Configuration console exit, please retry to log on</span><br><span class="line"></span><br><span class="line">  The connection was closed by the remote host</span><br><span class="line">&lt;Client&gt;</span><br></pre></td></tr></table></figure>
+
+<h1 id="5-通过用户名密码访问路由器"><a href="#5-通过用户名密码访问路由器" class="headerlink" title="5. 通过用户名密码访问路由器"></a>5. 通过用户名密码访问路由器</h1><h2 id="Server配置-2"><a href="#Server配置-2" class="headerlink" title="Server配置"></a>Server配置</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-- 进入aaa认证模式，创建用户cui和密码123456789</span><br><span class="line">[Server]aaa</span><br><span class="line">[Server-aaa]local-user cui password cipher 123456789 privilege level 15</span><br><span class="line">Info: Add a new user.</span><br><span class="line">[Server-aaa]local-user cui service-type telnet</span><br><span class="line">[Server-aaa]quit</span><br><span class="line">[Server]</span><br><span class="line">[Server]user-interface vty 0 4</span><br><span class="line">[Server-ui-vty0-4]authentication-mode aaa</span><br><span class="line">[Server-ui-vty0-4]quit</span><br><span class="line">[Server]quit</span><br><span class="line">&lt;Server&gt;save</span><br><span class="line">  The current configuration will be written to the device. </span><br><span class="line">  Are you sure to continue? (y&#x2F;n)[n]:y</span><br><span class="line">  It will take several minutes to save configuration file, please wait........</span><br><span class="line">  Configuration file had been saved successfully</span><br><span class="line">  Note: The configuration file will take effect after being activated</span><br><span class="line">&lt;Server&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="登录测试-1"><a href="#登录测试-1" class="headerlink" title="登录测试"></a>登录测试</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;Client&gt;</span><br><span class="line">&lt;Client&gt;telnet 192.168.1.254</span><br><span class="line">  Press CTRL_] to quit telnet mode</span><br><span class="line">  Trying 192.168.1.254 ...</span><br><span class="line">  Connected to 192.168.1.254 ...</span><br><span class="line"></span><br><span class="line">Login authentication</span><br><span class="line"></span><br><span class="line">Username:cui</span><br><span class="line">Password:</span><br><span class="line">&lt;Server&gt;sys</span><br><span class="line">[Server]quit</span><br><span class="line">&lt;Server&gt;quit</span><br><span class="line"></span><br><span class="line">  Configuration console exit, please retry to log on</span><br><span class="line"></span><br><span class="line">  The connection was closed by the remote host</span><br><span class="line">&lt;Client&gt;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>R&amp;S</category>
+      </categories>
+      <tags>
+        <tag>交换机/路由器</tag>
+        <tag>登录</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>通过SSH远程访问交换机</title>
+    <url>/R-S/2020/%E9%80%9A%E8%BF%87SSH%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE%E8%AE%BE%E5%A4%87/</url>
+    <content><![CDATA[<p>Telnet远程访问是以明文的方式在网络中传递消息，不能保证用户账号信息及传送数据的安全性，而SSH协议可以利用加密和认证功能在不安全的网络中提供安全保障。</p>
+<a id="more"></a>
+
+<h1 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1. 介绍"></a>1. 介绍</h1><p>SSH：安全外壳(Secure Shell)的简称。SSH可以利用加密和强大的认证功能提供安全保障，保护设备不受诸如IP地址欺骗、明文密码截取等攻击，从而对网络设备进行安全的远程访问。SSH采用采用C/S（客户端/服务器）</p>
+<h1 id="2-网络拓扑"><a href="#2-网络拓扑" class="headerlink" title="2. 网络拓扑"></a>2. 网络拓扑</h1><p><img data-src="/img/R-S/%E9%80%9A%E8%BF%87SSH%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE%E8%AE%BE%E5%A4%87/2-01.png" alt=""></p>
+<h1 id="3-配置路由器采用Password认证实现SSH远程登录"><a href="#3-配置路由器采用Password认证实现SSH远程登录" class="headerlink" title="3. 配置路由器采用Password认证实现SSH远程登录"></a>3. 配置路由器采用Password认证实现SSH远程登录</h1><h2 id="Server配置"><a href="#Server配置" class="headerlink" title="Server配置"></a>Server配置</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;Huawei&gt;sys</span><br><span class="line">[Huawei]sys Server</span><br><span class="line">[Server]inter g0&#x2F;0&#x2F;1</span><br><span class="line">[Server-GigabitEthernet0&#x2F;0&#x2F;1]inter g0&#x2F;0&#x2F;0</span><br><span class="line">[Server-GigabitEthernet0&#x2F;0&#x2F;0]ip add 192.168.1.254 24</span><br><span class="line">[Server-GigabitEthernet0&#x2F;0&#x2F;0]quit</span><br><span class="line">[Server]aaa</span><br><span class="line">[Server-aaa]local-user cui password cipher 12345678 privilege level 15</span><br><span class="line">[Server-aaa]local-user cui service-type ssh</span><br><span class="line">[Server-aaa]quit</span><br><span class="line">[Server]ssh user cui authentication-type password</span><br><span class="line">---</span><br><span class="line">设置所有用户默认的认证方式为password</span><br><span class="line">ssh authentication-type default password</span><br><span class="line">---</span><br><span class="line"> Authentication type setted, and will be in effect next time</span><br><span class="line">[Server]user-interface vty 0 4</span><br><span class="line">[Server-ui-vty0-4]authentication-mode aaa</span><br><span class="line">[Server-ui-vty0-4]protocol inbound ssh	</span><br><span class="line">[Server-ui-vty0-4]quit</span><br><span class="line">[Server]</span><br><span class="line">--</span><br><span class="line">修改端口号</span><br><span class="line">[Server]ssh server port 5678</span><br><span class="line">--</span><br><span class="line">[Server]quit</span><br><span class="line">&lt;Server&gt;save</span><br><span class="line">  The current configuration will be written to the device. </span><br><span class="line">  Are you sure to continue? (y&#x2F;n)[n]:y</span><br><span class="line">  It will take several minutes to save configuration file, please wait.......</span><br><span class="line">  Configuration file had been saved successfully</span><br><span class="line">  Note: The configuration file will take effect after being activated</span><br><span class="line">&lt;Server&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="公钥配置"><a href="#公钥配置" class="headerlink" title="公钥配置"></a>公钥配置</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-- 查看RSA公钥</span><br><span class="line">[Server]display rsa local-key-pair public</span><br><span class="line"></span><br><span class="line">-- 产生RSA本地密钥对</span><br><span class="line">[Server]rsa local-key-pair create </span><br><span class="line">The key name will be: Host</span><br><span class="line">% RSA keys defined for Host already exist.</span><br><span class="line">Confirm to replace them? (y&#x2F;n)[n]:y</span><br><span class="line">The range of public key size is (512 ~ 2048).</span><br><span class="line">NOTES: If the key modulus is greater than 512,</span><br><span class="line">       It will take a few minutes.</span><br><span class="line">Input the bits in the modulus[default &#x3D; 512]:2048</span><br><span class="line">Generating keys...</span><br><span class="line">................................+++</span><br><span class="line">....................+++</span><br><span class="line">...++++++++</span><br><span class="line">..................++++++++</span><br><span class="line"></span><br><span class="line">[Server]</span><br></pre></td></tr></table></figure>
+<h2 id="通过putty登录验证"><a href="#通过putty登录验证" class="headerlink" title="通过putty登录验证"></a>通过putty登录验证</h2><p><img data-src="/img/R-S/%E9%80%9A%E8%BF%87SSH%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE%E8%AE%BE%E5%A4%87/3-01.png" alt=""><br><img data-src="/img/R-S/%E9%80%9A%E8%BF%87SSH%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE%E8%AE%BE%E5%A4%87/3-02.png" alt=""></p>
+]]></content>
+      <categories>
+        <category>R&amp;S</category>
+      </categories>
+      <tags>
+        <tag>交换机/路由器</tag>
+        <tag>登录</tag>
       </tags>
   </entry>
 </search>

@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Helvetica:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":"ture","color":"#222","save":"manual"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"slideUpBigIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="CentOS（Community Enterprise Operating System，中文意思是社区企业操作系统）是Linux发行版之一，它是来自于Red Hat Enterprise Linux依照开放源代码规定释出的源代码所编译而成。由于出自同样的源代码，因此有些要求高度稳定性的服务器以CentOS替代商业版的Red Hat Enterprise Linux使用。两者的不同，在于CentO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VMware安装CentOS8操作系统,GPT模式分区">
+<meta property="og:url" content="http://yoursite.com/Linux/2020/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="Fifty Two">
+<meta property="og:description" content="CentOS（Community Enterprise Operating System，中文意思是社区企业操作系统）是Linux发行版之一，它是来自于Red Hat Enterprise Linux依照开放源代码规定释出的源代码所编译而成。由于出自同样的源代码，因此有些要求高度稳定性的服务器以CentOS替代商业版的Red Hat Enterprise Linux使用。两者的不同，在于CentO">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-01.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-02.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-03.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-04.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-05.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-06.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-07.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-08.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-09_01.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-09_02.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-1.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-2.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-3.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-4.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-5.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-7.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-8.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-9.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-10.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-11.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-12_01.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-12_02.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-13_01.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-13_02.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-14_01.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-14_02.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-15_01.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-15_02.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-16.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-17_01.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-17_02.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-18.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-19_01.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-19_02.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-19_03.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-20_01.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-20_02.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-20_03.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-21_01.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-21_02.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-31.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-23_01.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-23_02.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-23_03.png">
+<meta property="og:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-23_04.png">
+<meta property="article:published_time" content="2020-04-08T12:35:05.000Z">
+<meta property="article:modified_time" content="2020-05-08T03:07:43.362Z">
+<meta property="article:author" content="Fifty Two">
+<meta property="article:tag" content="CentOS">
+<meta property="article:tag" content="安装系统">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-01.png">
+
+<link rel="canonical" href="http://yoursite.com/Linux/2020/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>VMware安装CentOS8操作系统,GPT模式分区 | Fifty Two</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Fifty Two</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">8</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">3</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>宝贝回家</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/Linux/2020/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Fifty Two">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fifty Two">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VMware安装CentOS8操作系统,GPT模式分区
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-08 20:35:05" itemprop="dateCreated datePublished" datetime="2020-04-08T20:35:05+08:00">2020-04-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-08 11:07:43" itemprop="dateModified" datetime="2020-05-08T11:07:43+08:00">2020-05-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>CentOS（Community Enterprise Operating System，中文意思是社区企业操作系统）是Linux发行版之一，它是来自于Red Hat Enterprise Linux依照开放源代码规定释出的源代码所编译而成。由于出自同样的源代码，因此有些要求高度稳定性的服务器以CentOS替代商业版的Red Hat Enterprise Linux使用。两者的不同，在于CentOS完全开源。</p>
+<a id="more"></a>
+<p>在这里絮叨几句，14年买第一台笔记本，Windowns8.1操作系统，磁盘分区为GPT，我对电脑一窍不通(买完笔记本后，兴高采烈的回到家我却不会开机，还专门去了一趟专卖店，才知道电池没电了)，我是计算机行业的学生，第一堂课讲的就是安装Windows操作系统，用的是老毛桃、大白菜等U盘启动方式安装GHOST操作系统，然后就是一堆广告。当初(2014年)电脑维修店想装系统，他们唯一的办法就是把整块磁盘格式化，然后以MBR方式安装Windows7系统，到底什么是MBR，什么是GPT呢，我找到的资料是这样解释的：</p>
+<ul>
+<li>Legacy和UEFI指的是系统引导方式(Legacy为传统BIOS，UEFI为新式BIOS)，MBR和GPT指的是磁盘分区表类型。</li>
+<li>由于UFEI和Legacy是两种不同的引导方式，UEFI引导windows系统的文件为winload.efi，而Legacy引导windows系统的文件为winload.exe</li>
+<li>一般情况下都是Legacy+MBR， UEFI+GPT这两种组合。但Legacy+GPT，UEFI+MBR也可以实现。</li>
+<li>分区类型<br>MBR(主引导记录)是传统的分区表类型，最大缺点是不支持容量大于2T的硬盘。<br>MBR分区表最多只能支持4个主分区或三个主分区+1个扩展分区(逻辑分区不限制)<br>GPT(GUID分区表)是新型的分区表类型，可支持最大容量为18EB的硬盘，这个数量相当庞大(1EB=1024PB,1PB=1024TB,1TB=1024GB)<br>GPT分区大小限制取决于操作系统及其文件系统。GPT还允许几乎无限数量的分区，在Windows系统上可以划分128个主分区，近几年新出的笔记本基本上都是GPT分区类型</li>
+<li>启动过程<br>Legacy启动过程：开机 –&gt; BIOS初始化 –&gt; BIOS自检 –&gt; 引导操作系统 –&gt; 进入系统<br>UEFI启动过程：开机 –&gt; UEFI初始化 –&gt; 引导操作系统 –&gt; 进入操作系统</li>
+</ul>
+<h2 id="一、准备材料"><a href="#一、准备材料" class="headerlink" title="一、准备材料"></a>一、准备材料</h2><ol>
+<li><p>下载并安装vmware workstation软件<br>目前(2020年4月)最新版本为15.5.2。这个软件安装比较简单，一直选择“下一步”就可以了，若遇到问题，推荐百度搜索答案，或者邮箱联系我</p>
+</li>
+<li><p>下载CentOS8.1 可以选择官方网站下载，也可以把下面的连接放入迅雷中进行下载，文件较大，约7GB<br>下载地址：<a href="http://ftp.sjtu.edu.cn/centos/8.1.1911/isos/x86_64/CentOS-8.1.1911-x86_64-dvd1.iso" target="_blank" rel="noopener">http://ftp.sjtu.edu.cn/centos/8.1.1911/isos/x86_64/CentOS-8.1.1911-x86_64-dvd1.iso</a></p>
+</li>
+<li><p>若真实服务器安装，可光盘引导安装，若无光盘，可以准备U盘进行刻录，然后通过U盘启动。</p>
+</li>
+</ol>
+<h2 id="二、打开VMware，创建所需环境"><a href="#二、打开VMware，创建所需环境" class="headerlink" title="二、打开VMware，创建所需环境"></a>二、打开VMware，创建所需环境</h2><ol>
+<li><p>新建虚拟机，(快捷键Ctrl+N)<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-01.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>选择“典型”，然后点击“下一步”<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-02.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>选择“稍候安装操作系统”，(若选择“安装程序光盘镜像文件”系统会自动创建虚拟环境，不利于实验）<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-03.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>选择客户机操作系统，VMware暂未收录CentOS8，这里就选择”CentOS7 64位”<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-04.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>命名虚拟机、定义存储位置<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-05.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>配置磁盘容量，我电脑磁盘空间有限，就用默认的20GB了，可根据使用环境自行调整，若后期不够了，磁盘是可以添加的<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-06.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>选择“完成”<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-07.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>这里我们选择自定义硬件<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-08.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>配置内存、处理器、选择安装光盘，内存和光盘我就不演示了，根据自己的实际情况配置，建议内存在2GB或以上，网卡模式我选择的是桥接模式<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-09_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-09_02.png" alt="https://blog.hellocui.com"></p>
+</li>
+</ol>
+<h2 id="三、安装系统"><a href="#三、安装系统" class="headerlink" title="三、安装系统"></a>三、安装系统</h2><ol>
+<li><p>选择“开启虚拟机”<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-1.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>看到这个界面，将光标停留在第一项，当文字变为白色<br>此处需要注意一下，若以MBR模式分区，选择第一项然后回车即可，<br>若以GPT模式分区，选择第一项之后，按一下键盘的“TAB键”，会显示完整配置项，最下行输入 inst.gpt 前面包含一个空格，然后按回车健，这里推荐使用GPT模式分区，我的安装方式也是基于GPT模式分区方式安装的<br> 解释一下：</p>
+<pre><code>第一项表示安装CentOS 8
+第二项表示校验光盘，然后安装CentOS8
+第三项为故障排除模式，如，当启动项出故障了，可以选择第三项进行恢复，后期博客中我会做演示</code></pre><p><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-2.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>等待片刻，会看到如下界面语言选择界面，由于是初步使用，默认为英文，若想使用简体中文，则在搜索框中输入Chinese即可出现中文，然后按照步骤选择即可<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-3.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>选择“安装目的地”<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-4.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>安装位置就是刚刚创建的20GB磁盘空间，我们这里选择自定义分区，若嫌麻烦，可以选择自动<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-5.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>分区建议<br>分区建议和说明：</p>
+<ul>
+<li>boot分区：         <ul>
+<li>作用：引导分区，包含了系统启动的必要内核文件，即使根分区顺坏也能正常引导启动 一般这些文件所占空间在200M以下，</li>
+<li>分区建议：分区的时候可选100M-500M之间,如果空间足够用，建议分300-500M。避免由于长期使用的冗余文件塞满这个分区。</li>
+<li>分区格式：建议ext4，按需求更改</li>
+<li>MBR方式引导为：/boot</li>
+<li>UEFI方式引导为：/boot 和 /biosboot</li>
+</ul>
+</li>
+<li>/分区（根分区）：         <ul>
+<li>作用：所有的文件都从这里开始。</li>
+<li>分区建议：建议15G以上。看需求，主要占空间在哪儿就在那里分大容量</li>
+<li>分区格式：建议xfs,按需求更改<ul>
+<li>swap分区：</li>
+</ul>
+</li>
+<li>作用：交换分区，虚拟内存，在内存不够用时占用硬盘的虚拟内存来进行临时数据的存放</li>
+<li>分区建议：建议1-16G，一般是物理内存大小的2倍，比如你电脑是4G的物理内存，swap分区可以是8G，若真的长时间使用swap分区了，可以考虑增加物理内存</li>
+<li>分区格式：swap格式<ul>
+<li>home分区</li>
+</ul>
+</li>
+<li>作用：存放用户数据，HOME的结构一般是 HOME/userName/userFile，如果不分则默认在/目录下</li>
+<li>分区建议：如果用户数据多可以将此分区适当增大，请参考“根分区”分区建议；一般硬盘的主要容量几乎都在Home分区和根分区下</li>
+<li>分区格式：建议xfs，按需求更改<ul>
+<li>var分区</li>
+</ul>
+</li>
+<li>作用：用于log日志的文件的存放，如果不分则默认在/目录下</li>
+<li>分区建议：如果你安装的linux是用于服务器或者经常做日志分析，请划分var分区，避免日志文件不断膨胀塞满导致根分区而引发问题。</li>
+<li>分区格式：建议xfs，按需求更改</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>创建biosboot分区,不用配置大小，默认大小为2M<br>建议使用LVM分区格式，后期可以动态扩容<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-7.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>创建boot分区，配置200M，可根据实际需求适当调试大小<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-8.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>创建swap分区，这里设置为2G<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-9.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>创建根分区，分区大小为余下的所有<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-10.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>分完分区后按下左上角的“完成”按钮，之后会弹出确认框，选择接受更改即可<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-11.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>软件选择，处于初次使用，这里我选择”带GUI的服务器”进行安装，我个人偏向于“虚拟化主机”，即纯命令行<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-12_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-12_02.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>选择时区，我们选择“中国-上海”即可<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-13_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-13_02.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>配置网络<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-14_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-14_02.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>可选项：取消KDUMP<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-15_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-15_02.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>开始安装<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-16.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>配置root密码<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-17_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-17_02.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>等待安装即可，安装完毕后会出现下列提示，点击“重启”即可<br>此处需要注意一下：用安装介质为光盘、U盘安装并设置为第一启动项，此时请移除安装介质或将启动项设置为最后<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-18.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>接受许可<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-19_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-19_02.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-19_03.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>配置向导<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-20_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-20_02.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-20_03.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>若在第26步骤中未创建普通用户，则在此处会提示创建普通用户，否则无法进入图形界面<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-21_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-21_02.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>选择“开始使用CentOS Linux(S)”<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/2-31.png" alt="https://blog.hellocui.com"></p>
+</li>
+<li><p>登录操作系统<br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-23_01.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-23_02.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-23_03.png" alt="https://blog.hellocui.com"><br><img data-src="/img/Linux/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-23_04.png" alt="https://blog.hellocui.com"></p>
+</li>
+</ol>
+<hr>
+<div style="text-align: right"> 2020年4月 <br> https://blog.hellocui.com </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>交个朋友呗</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    握手
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/reward/wechatpay.png" alt="Fifty Two 微信赞赏">
+        <p>微信赞赏</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/CentOS/" rel="tag"><i class="fa fa-tag"></i> CentOS</a>
+              <a href="/tags/%E5%AE%89%E8%A3%85%E7%B3%BB%E7%BB%9F/" rel="tag"><i class="fa fa-tag"></i> 安装系统</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/Linux/2020/nmcli%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/" rel="next" title="nmcli工具介绍">
+      nmcli工具介绍 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80OTUwOC8yNTk5OQ=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、准备材料"><span class="nav-text">一、准备材料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、打开VMware，创建所需环境"><span class="nav-text">二、打开VMware，创建所需环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、安装系统"><span class="nav-text">三、安装系统</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Fifty Two"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Fifty Two</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element">
+    天道轮回，苍天饶过谁
+  </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fifty Two</span>
+</div>
+有一种孤独，叫52赫兹
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+    <div id="pjax">
+  
+
+  
+
+  
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'http://yoursite.com/Linux/2020/VMware%E5%AE%89%E8%A3%85CentOS8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/',]
+      });
+      });
+  </script>
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+    </div>
+<!-- 小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+<!--卖萌-->
+<script type="text/javascript" src="/js/src/dytitle.js"></script>
+</body>
+</html>
+<script type="text/javascript" src="/js/src/particle.js"></script>
